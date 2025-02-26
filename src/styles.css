@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+.link-type1-section img {
+    height: 75px;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+.link-type1-section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 20px;
+    cursor: pointer;
+
+}
+
+.link-type1-section:hover {
+    color: #2c5b93;
+}
+.css-intable-img {
+    height: 25px;
+    cursor: pointer;
+}
+.table tr:hover td {
+    background-color: #b7c6d8;
+}
+.css-section-navi {
+    margin-bottom: 30px;
+}
+.css-section-navi > * {
+    margin: 0 5px 0 5px;
+}
+.alignRight {
+    text-align: right;
+}
+.alignRight * {
+    margin-right: 10px;
+}
+.btn {
+    margin: 0 5px 0 5px;
+    padding: 5px 15px 5px 15px;
+}
