@@ -142,6 +142,7 @@ export class ProformaComponent {
   mService: GodisService = inject(GodisService);
 
   proformaShortList = this.mService.getProformaShortList();
+  
   proformaDetail: Proforma | undefined;
 
   constructor(private route: ActivatedRoute, private router: Router) {
