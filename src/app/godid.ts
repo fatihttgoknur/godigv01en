@@ -95,14 +95,15 @@ export interface Proforma {
     id: number,
     customer: Customer,
     customerDelegate?: CustomerDelegate,
-    machines?: { machine: MachineModel, unitPrice: number, quantity: number }[],
-    parts?: { part: Part, unitPrice: number, quantity: number}[],
-    services?: {service: Service, unitPrice: number, quantity: number}[]
+    machines?: { machine: MachineModel, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number }[],
+    parts?: { part: Part, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number}[],
+    services?: {service: Service, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number}[]
     percentDiscount?: number,
     deadline: Date,
     notes?: string[],
     createdBy: User,
     createdDate: Date,
-    validUntil: Date
+    validUntil: Date,
+    deactive?: boolean,
     revisedById?: number
 }

@@ -42,3 +42,22 @@ body {
     margin: 0 5px 0 5px;
     padding: 5px 15px 5px 15px;
 }
+.css-nomar {
+    margin-top: 0px;
+    margin-bottom: 0px !important;
+}
+.css-div-form {
+    margin-top: 20px;
+}
+.css-small-font {
+    font-size: smaller;
+}
+.table th {
+    text-align: center;
+}
+.css-td-noBottomBorder {
+    border-bottom-style: none !important;
+}
+.css-td-noTopBorder {
+    border-top-style: none !important;
+}

@@ -33,25 +33,25 @@ export class GodisService {
       id: 0, 
       user: { id: 0, userName: 'admin', password: 'admin', email: 'arge@goknur.eu' }, 
       role: { id: 0, name: 'admin' }, 
-      start: new Date("14.02.2025") 
+      start: new Date("02.14.2025") 
     },
     { 
       id: 1, 
       user: { id: 1, userName: 'boss', password: 'boss', email: 'boss@goknur.eu' }, 
       role: { id: 1, name: 'boss' }, 
-      start: new Date("14.02.2000") 
+      start: new Date("02.14.2000") 
     },
     { 
       id: 2, 
       user:{ id: 2, userName: 'director', password: 'director', email: 'director@goknur.eu' }, 
       role: { id: 2, name: 'director'}, 
-      start: new Date("14.02.2015") 
+      start: new Date("02.14.2015") 
     },
     { 
       id: 3, 
       user:{ id: 3, userName: 'manager', password: 'manager', email: 'manager@goknur.eu' }, 
       role: { id: 3, name: 'manager'}, 
-      start: new Date("14.02.2020") 
+      start: new Date("02.14.2020") 
     },
   ];
 
@@ -70,51 +70,58 @@ export class GodisService {
       id: 0,
       model: { id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' },
       price: 100500,
-      validityDate: new Date("14.02.2025"),
+      validityDate: new Date("02.14.2025"),
     },
     {
       id: 1,
       model: { id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' },
       price: 92500,
-      validityDate: new Date("14.02.2025"),
+      validityDate: new Date("02.14.2025"),
     },
     {
       id: 2,
       model: { id: 2, abbreviation: 'TSM', name: 'Talaş Sarma Makinesi' },
       price: 22500,
-      validityDate: new Date("14.02.2025"),
+      validityDate: new Date("02.14.2025"),
     },
     {
       id: 3,
       model: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
       price: 42500,
-      validityDate: new Date("14.02.2025"),
+      validityDate: new Date("02.12.2025"),
+      validityEndDate: new Date("02.24.2025")
     },
     {
       id: 4,
       model: { id: 4, abbreviation: 'YGO', name: 'Yıkama Giriş Otomasyonu' },
       price: 62500,
-      validityDate: new Date("14.02.2025"),
+      validityDate: new Date("02.14.2025"),
     },
     {
       id: 5,
       model: { id: 5, abbreviation: 'OFMK', name: 'Otomatik Frezeli Maça Kaynak Makinesi' },
       price: 62500,
-      validityDate: new Date("14.02.2025"),
+      validityDate: new Date("02.14.2025"),
     },
     {
       id: 6,
       model: { id: 6, abbreviation: 'TOPY', name: 'Teflon Otomatik Pul Yükleme Otomasyonu' },
       price: 72500,
       validityDate: new Date("10.02.2024"),
-      validityEndDate: new Date("14.02.2025"),
+      validityEndDate: new Date("02.14.2025"),
     },
     {
       id: 7,
       model: { id: 6, abbreviation: 'TOPY', name: 'Teflon Otomatik Pul Yükleme Otomasyonu' },
       price: 72500,
-      validityDate: new Date("14.02.2025"),
-    }
+      validityDate: new Date("02.14.2025"),
+    },
+    {
+      id: 8,
+      model: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
+      price: 40000,
+      validityDate: new Date("02.24.2025"),
+    },
   ];
 
   protected parts: Part[] = [
@@ -167,7 +174,7 @@ export class GodisService {
         inMachineModels: [{ id: 4, abbreviation: 'YGO', name: 'Yıkama Giriş Otomasyonu' }]
       }, 
       price: 33, 
-      validityDate: new Date("14.02.2025")
+      validityDate: new Date("02.14.2025")
     },
     { 
       id: 1, 
@@ -177,7 +184,7 @@ export class GodisService {
         inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }]
       }, 
       price: 66, 
-      validityDate: new Date("14.02.2025")
+      validityDate: new Date("02.14.2025")
     },
     { 
       id: 2, 
@@ -187,7 +194,7 @@ export class GodisService {
         inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }]
       }, 
       price: 44, 
-      validityDate: new Date("14.02.2025")
+      validityDate: new Date("02.14.2025")
     },
     { 
       id: 3, 
@@ -197,7 +204,7 @@ export class GodisService {
         inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }]
       }, 
       price: 33, 
-      validityDate: new Date("14.02.2025")
+      validityDate: new Date("02.14.2025")
     },
     { 
       id: 4, 
@@ -207,7 +214,7 @@ export class GodisService {
         inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }]
       }, 
       price: 230, 
-      validityDate: new Date("14.02.2025")
+      validityDate: new Date("02.14.2025")
     },
     { 
       id: 5, 
@@ -217,7 +224,7 @@ export class GodisService {
         inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }]
       }, 
       price: 640, 
-      validityDate: new Date("14.02.2025")
+      validityDate: new Date("02.14.2025")
     }
   ];
 
@@ -234,32 +241,39 @@ export class GodisService {
       id: 0,
       service: { id: 0, name: 'Montaj (Saatlik)' }, 
       price: 100, 
-      validityDate: new Date("14.02.2025") 
+      validityDate: new Date("02.14.2025") 
     },
     { 
       id: 1,
       service: { id: 1, name: 'Montaj (Günlük)' }, 
       price: 500, 
-      validityDate: new Date("14.02.2025") 
+      validityDate: new Date("01.14.2024"), 
+      validityEndDate: new Date("01.25.2025")
     },
     { 
       id: 2,
       service: { id: 2, name: 'Bakım (Saatlik)' }, 
       price: 200, 
-      validityDate: new Date("14.02.2025") 
+      validityDate: new Date("02.14.2025") 
     },
     { 
       id: 3,
       service: { id: 3, name: 'Bakım (Günlük)' }, 
       price: 600, 
-      validityDate: new Date("14.02.2025") 
+      validityDate: new Date("02.14.2025") 
     },
     { 
       id: 4,
       service: { id: 4, name: 'Devreye Alma (Günlük)' }, 
       price: 400, 
-      validityDate: new Date("14.02.2025") 
-    }
+      validityDate: new Date("02.14.2025") 
+    },
+    { 
+      id: 5,
+      service: { id: 1, name: 'Montaj (Günlük)' }, 
+      price: 550, 
+      validityDate: new Date("01.25.2025") 
+    },
   ];
 
   protected customers: Customer[] = [
@@ -302,13 +316,44 @@ export class GodisService {
       machines: [{
         machine: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
         unitPrice: 23000, 
-        quantity: 3
+        quantity: 3,
+        notes: ["kapasite: 1000 adet/saat", "vibrasyon: X marka"],
+        terminDays: 60
       }],
+      parts: [
+        {
+          part: { id: 5, 
+            name: 'Pens tutucu tabanca', 
+            code: 'GYP-1000006',
+            inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }],
+            unit: "adet"
+          },
+          unitPrice: 600,
+          quantity: 4,
+          terminDays: 0,
+        }
+      ],
+      services: [
+        {
+          service: { id: 1, name: 'Montaj (Günlük)' },
+          unitPrice: 510,
+          quantity: 2,
+          notes: ["yol ve konaklama masrafları müşteriye ait"],
+          terminDays: -1
+        }
+      ],
       deadline: new Date("20.01.1970"),
       percentDiscount: 5,
       createdBy: { id: 3, userName: 'manager', password: 'manager', email: 'manager@goknur.eu' },
       createdDate: new Date("2025-01-23T03:24:00Z"),
-      validUntil: new Date("23.02.2025 11:03:43")
+      validUntil: new Date("2025-01-27T03:24:00Z"),
+      notes: [
+        "Fiyatlarımıza T.C.M.B. Döviz kuru geçeridir.",
+        "Fiyatlara K.D.V. dahil değildir",
+        "Teslim yeri iş yerimizdir",
+        "Onay (Fax/E-mail) alınmadan sipariş kabul edilmeyecektir.",
+        "Yedek parça ve işçilik bedelleri peşin olarak alınacaktır."
+      ]
     }
   ];
 
@@ -834,8 +879,10 @@ export class GodisService {
 
   }
 
-  protected giveTotalPrice(proforma: Proforma): number {
+  giveTotalPrice(proforma: Proforma, discount?: boolean): number {
     let myTotalPrice = 0;
+
+    if (discount === undefined) discount = false;
 
     if (proforma.machines) {
       for (var machineModel of proforma.machines) myTotalPrice += (machineModel.unitPrice * machineModel.quantity);
@@ -849,18 +896,22 @@ export class GodisService {
       for (var service of proforma.services) myTotalPrice += (service.unitPrice * service.quantity);
     }
 
-    if (proforma.percentDiscount) myTotalPrice = myTotalPrice * (1 + (proforma.percentDiscount / 100));
+    if (discount === true) return myTotalPrice;
+
+    if (proforma.percentDiscount) myTotalPrice = myTotalPrice * (1 - (proforma.percentDiscount / 100));
 
     return myTotalPrice;
   }
 
-  getProformaShortList(): {id: number, customerName: string, customerId: number, createdDate: Date, totalPrice: number, createdBy: User, detailsOpen: boolean}[] | undefined {
+  getProformaShortList(showDeactives?: boolean): {id: number, customerName: string, customerId: number, createdDate: Date, totalPrice: number, createdBy: User, detailsOpen: boolean, deactive: boolean}[] | undefined {
     // id, customer name, createdDate, total price
 
     try {
-      let proformaShortList: {id: number, customerName: string, customerId: number, createdDate: Date, totalPrice: number, createdBy: User, detailsOpen: boolean}[] = [];
+      let proformaShortList: {id: number, customerName: string, customerId: number, createdDate: Date, totalPrice: number, createdBy: User, detailsOpen: boolean, deactive: boolean}[] = [];
 
       for (var proforma of this.proformas) {
+
+        if (!showDeactives && proforma.deactive) break;
 
         proformaShortList.push(
           {
@@ -870,7 +921,8 @@ export class GodisService {
             createdDate: proforma.createdDate,
             totalPrice: this.giveTotalPrice(proforma),
             createdBy: proforma.createdBy,
-            detailsOpen: false
+            detailsOpen: false,
+            deactive: proforma.deactive ?? false
           }
         )
       }
@@ -891,11 +943,158 @@ export class GodisService {
         return;
       }
 
-      else return myProforma;
+      else {
+        if (myProforma.machines) {
+          for (var machine of myProforma.machines) {
+  
+            const myData = this.getProformaListPrice(0, machine.machine.id, myProforma.createdDate);
+  
+            machine.listPriceBefore = myData.before;
+            machine.listPriceNow = myData.now;
+          }
+        }
+        
+        if (myProforma.parts) {
+          for (var part of myProforma.parts) {
+            const myData = this.getProformaListPrice(1, part.part.id, myProforma.createdDate);
+            part.listPriceBefore = myData.before;
+            part.listPriceNow = myData.now;
+          }
+        }
+
+        if (myProforma.services) {
+          for (var service of myProforma.services) {
+            const myData = this.getProformaListPrice(2, service.service.id, myProforma.createdDate);
+            service.listPriceBefore = myData.before;
+            service.listPriceNow = myData.now
+          }
+        }
+
+        return myProforma;
+      }
 
     } catch (err) {
       console.log("Service error while getting proforma details.", err);
       return;
+    }
+  }
+
+  getProformaListPrice(type: number, mId: number, mDate: Date): {before: number, now: number} {
+    try {
+
+      let myData = {before: -1, now: -1};
+      const mNow = new Date();
+
+      // for machines
+      if (type === 0) {
+        const myMachine = this.machineModels.find(mm => mm.id === mId);
+
+        if (!myMachine) {
+          console.log("Service error while taking list prices. Machine not found.", mId);
+          return myData;
+        }
+
+        const myMachinePrices = this.machineModelPrices.filter( mp => mp.model.id === mId);
+
+        if (!myMachinePrices) {
+          console.log("Service error while taking list prices. Price not found.", mId);
+          return myData;
+        }
+
+        const myCurrentPrice = myMachinePrices.find(mmp => !mmp.validityEndDate);
+
+        if (myMachinePrices.length > 1) {
+          let myPreviousPrice = myMachinePrices.find(mmp => mmp.validityEndDate && mmp.validityDate < mDate && mmp.validityEndDate >= mDate);
+
+          if (!myPreviousPrice) myPreviousPrice = myCurrentPrice;
+
+          myData.before = myPreviousPrice?.price ?? -1;
+          myData.now = myCurrentPrice?.price ?? -1;
+
+          return myData;
+
+        }
+        else {
+          myData.before = myMachinePrices[0].price;
+          myData.now = myCurrentPrice?.price ?? -1;
+          return myData;
+        }
+      }
+
+      else if (type === 1) {
+        const myPart = this.parts.find(mp=> mp.id === mId);
+
+        if (!myPart) {
+          console.log("Service error while taking list prices. Part not found.", mId);
+          return myData;
+        }
+
+        const myPartPrices = this.partPrices.filter(mp => mp.part.id === mId);
+
+        if(!myPartPrices) {
+          console.log("Service error while taking list prices. Price not found.", mId);
+          return myData;
+        }
+
+        const myCurrentPrice = myPartPrices.find(mmp => !mmp.validityEndDate);
+
+        if (myPartPrices.length > 1) {
+          let myPreviousPrice = myPartPrices.find(mpp => mpp.validityEndDate && mpp.validityDate < mDate && mpp.validityEndDate >= mDate);
+
+          if (!myPreviousPrice) myPreviousPrice = myCurrentPrice;
+
+          myData.before = myPreviousPrice?.price ?? -1;
+          myData.now = myCurrentPrice?.price ?? -1;
+
+          return myData;
+        }
+        else {
+          myData.before = myCurrentPrice?.price ?? -1;
+          myData.now = myData.before;
+
+          return myData;
+        }
+          
+      }
+      else if (type === 2) {
+        const mService = this.services.find(s => s.id === mId);
+
+        if (!mService) {
+          console.log("Service error while taking list prices. Service not found.", mId);
+          return myData;
+        }
+
+        const myServicePrices = this.servicePrices.filter(ms => ms.service.id === mId);
+
+        if(!myServicePrices) {
+          console.log("Service error while taking list prices. Price not found.", mId);
+          return myData;
+        }
+
+        const myCurrentPrice = myServicePrices.find(msp => !msp.validityEndDate);
+
+        if(myServicePrices.length > 1) {
+          
+          let myPreviousPrice = myServicePrices.find(msp => msp.validityEndDate && msp.validityDate < mDate && msp.validityEndDate >= mDate);
+
+          if(!myPreviousPrice) myPreviousPrice = myCurrentPrice;
+
+          myData.before = myPreviousPrice?.price ?? -1;
+          myData.now =myCurrentPrice?.price ?? -1;
+
+          return myData;
+        }
+        else {
+          myData.before = myCurrentPrice?.price ?? -1;
+          myData.now = myData.before;
+
+          return myData;
+        }
+      }
+      else return {before: -1, now:-1}
+    } catch (err) {
+      console.log("Service error while taking list prices.", err);
+      return {before: -1, now: -1}
     }
   }
 
@@ -936,13 +1135,12 @@ export class GodisService {
 
     if (! format || format === 0) {
 
-      const options = {
-        
-        day: "numeric",
-      };
-
       return mDate.toLocaleDateString("tr-TR", {day: '2-digit', month: 'long', year: '2-digit'});
 
+    }
+
+    if (format === 1) {
+      return mDate.toLocaleDateString("tr-TR", {day: '2-digit', month: 'short', year: 'numeric'});
     }
 
     return "--error--";
