@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GodisService } from '../godis.service';
 import { Proforma } from '../godid';
 import { CustomerComponent } from '../customer/customer.component';
-CustomerComponent
+
 
 @Component({
   selector: 'app-proforma',
@@ -107,13 +107,23 @@ CustomerComponent
                 <div class="row mb-3 css-nomar">
                   <label class="col-sm-3 col-form-label">Tarih:</label>
                   <div class="col-sm-7">
-                    {{ (this.proformaDetail && this.proformaDetail.createdDate) ? mService.formatDate(this.proformaDetail.createdDate, 1) : '' }}
+                    @if (!changeActive && !newRecord) {
+                      {{ (this.proformaDetail && this.proformaDetail.createdDate) ? mService.formatDate(this.proformaDetail.createdDate, 1) : '' }}
+                    }
+                    @else {
+                      {{ this.mService.formatDate(mNow, 1) }}
+                    }
                   </div>
                 </div>
                 <div class="row mb-3 css-nomar">
                   <label class="col-sm-3 col-form-label">Son Geçerlilik:</label>
                   <div class="col-sm-7">
-                    {{ (this.proformaDetail && this.proformaDetail.validUntil) ? mService.formatDate(this.proformaDetail.validUntil, 1) : '' }}
+                    @if (!changeActive && !newRecord) {
+                      {{ (this.proformaDetail && this.proformaDetail.validUntil) ? mService.formatDate(this.proformaDetail.validUntil, 1) : '' }}
+                    }
+                    @else {
+                      {{ 'aasd' }}
+                    }
                   </div>
                 </div>
                 <div class="row mb-3 css-nomar">
@@ -125,9 +135,12 @@ CustomerComponent
                 <div class="row mb-3 css-nomar">
                   <label class="col-sm-3 col-form-label">İçerik:</label>
                   <div class="col-sm-7">
+                    @if (this.newRecord || this.changeActive) {
+                      Ekle
+                    }
                   </div>
                 </div>
-                <div class="outer">
+                <div class="outer css-inhalt">
                 <table class="table css-small-font">
                   <thead>
                     <tr>
@@ -284,6 +297,21 @@ CustomerComponent
                     }
                   </div>
                 </div>
+                <div class="row mb-3">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-7">
+                  @if (!changeActive) {
+                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Değiştir</button>
+                  }
+                  @else if (!this.newRecord) {
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
+                  }
+                  @else {
+                    <button type="button" class="btn btn-success" (click)="newProforma()">Kaydet</button>
+                  }
+                </div>
+              </div>
                 }
               </form>
           </div>
@@ -368,7 +396,14 @@ export class ProformaComponent {
   changeActive = false;
 
   newRecord = false;
+
   N1var = false;
+  
+  addableMachineModels = [];
+
+  addableParts = [];
+  
+  addableServices = [];
 
   fgShowDeleted = new FormGroup({
     fcShowDeleted: new FormControl(false)
@@ -378,6 +413,8 @@ export class ProformaComponent {
   )
 
   showDeactives = false;
+
+  mNow = new Date();
 
   mService: GodisService = inject(GodisService);
 
@@ -427,5 +464,16 @@ export class ProformaComponent {
     
     this.proformaShortList = this.mService.getProformaShortList(show ?? false);
   }
+
+  makeChangeActive() {
+    this.changeActive = true;
+  }
+
+  changeCancel() {
+    this.changeActive = false;
+    this.proformaDetail = this.mService.getProformaDetails(this.detailId);
+  }
+
+  newProforma() {}
 
 }
