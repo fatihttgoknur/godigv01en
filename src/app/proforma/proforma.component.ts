@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GodisService } from '../godis.service';
 import { Proforma } from '../godid';
 import { CustomerComponent } from '../customer/customer.component';
+import { DatepickerComponent } from '../datepicker/datepicker.component';
 
 
 @Component({
   selector: 'app-proforma',
-  imports: [RouterModule, ReactiveFormsModule, CustomerComponent],
+  imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent],
   template: `
     <div class="proforma-main">
       @if (!this.detailId && this.detailId != 0) {
@@ -122,7 +123,7 @@ import { CustomerComponent } from '../customer/customer.component';
                       {{ (this.proformaDetail && this.proformaDetail.validUntil) ? mService.formatDate(this.proformaDetail.validUntil, 1) : '' }}
                     }
                     @else {
-                      {{ 'aasd' }}
+                      <app-datepicker [fInput]="'02.11.2025'" (selectedDate)="this.dateExpirePicker = $event"></app-datepicker>
                     }
                   </div>
                 </div>
@@ -136,7 +137,15 @@ import { CustomerComponent } from '../customer/customer.component';
                   <label class="col-sm-3 col-form-label">İçerik:</label>
                   <div class="col-sm-7">
                     @if (this.newRecord || this.changeActive) {
-                      Ekle
+                      <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        + Ekle
+                      </button>
+                      <div class="dropdown-menu">
+                          <!--<div class="dropdown-divider"></div>-->
+                          <a class="dropdown-item" style="cursor: pointer;">Makine</a>
+                          <a class="dropdown-item" style="cursor: pointer;">Parça</a>
+                          <a class="dropdown-item" style="cursor: pointer;">Servis</a>
+                      </div>
                     }
                   </div>
                 </div>
@@ -159,6 +168,10 @@ import { CustomerComponent } from '../customer/customer.component';
                         <td>{{idx + 1}}</td>
                         <td>
                           {{ pMachine.machine.name }}
+                          @if (changeActive || newRecord) {
+                            <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editMachine(pMachine.machine.id)" />
+                            <img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteMachine(pMachine.machine.id)" />
+                          }
                         </td>
                         <td class="alignRight">
                           @if (pMachine.listPriceBefore != pMachine.listPriceNow) {
@@ -197,7 +210,13 @@ import { CustomerComponent } from '../customer/customer.component';
                     @for (pPart of proformaDetail?.parts; track pPart; let idx = $index) {
                       <tr>
                         <td>{{ (proformaDetail?.machines?.length ?? 0) + idx + 1 }}</td>
-                        <td>{{ pPart.part.name }}</td>
+                        <td>
+                          {{ pPart.part.name }}
+                          @if (changeActive || newRecord) {
+                            <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editPart(pPart.part.id)" />
+                            <img src="/images/delete.png" class="css-intable-img css-img-smll"title="Sil" (click)="deletePart(pPart.part.id)" />
+                          }
+                        </td>
                         @if (pPart.listPriceBefore != pPart.listPriceNow) {
                           <td class="alignRight">
                             <span title="eski">{{ pPart.listPriceBefore }}</span> | 
@@ -214,7 +233,7 @@ import { CustomerComponent } from '../customer/customer.component';
                           {{ showTermin(pPart.terminDays) }}
                         </td>
                       </tr>
-                      @if (pPart.notes && pPart.notes.length > 0) {
+                      @if (pPart.notes && pPart.notes.length > 0 ) {
                       <tr>
                         <td></td>
                         <td colspan="6">
@@ -232,7 +251,13 @@ import { CustomerComponent } from '../customer/customer.component';
                         <td>
                           {{ (proformaDetail?.machines?.length ?? 0) + (proformaDetail?.parts?.length ?? 0) + idx + 1 }}
                         </td>
-                        <td>{{ pService.service.name }}</td>
+                        <td>
+                          {{ pService.service.name }}
+                          @if (changeActive || newRecord) {
+                              <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editService(pService.service.id)" />
+                              <img src="/images/delete.png" class="css-intable-img css-img-smll"title="Sil" (click)="deleteService(pService.service.id)" />
+                          }
+                        </td>
                         @if (pService.listPriceBefore != pService.listPriceNow) {
                           <td class="alignRight">
                           <span title="eski">{{ pService.listPriceBefore }}</span> | 
@@ -320,6 +345,9 @@ import { CustomerComponent } from '../customer/customer.component';
     </div>
   `,
   styles: `
+    .scl1 {
+      transform: scale(0.7);
+    }
     .proforma-main {
       margin-top: 20px;
     }
@@ -385,6 +413,24 @@ import { CustomerComponent } from '../customer/customer.component';
     div.outer:has( > .table) {
       border: 1px solid black;
     }
+    .css-img-smll {
+      height: 20px;
+    }
+    .css-img-xsmll{
+      height: 17px;
+    }
+    .css-img-smll, .css-img-xsmll {
+      display: none;
+    }
+
+    .css-proforma-note:hover .css-img-xsmll {
+      display: inline;
+    }
+
+    td:hover .css-img-smll {
+      display: inline;
+    }
+
   `
 })
 export class ProformaComponent {
@@ -421,6 +467,8 @@ export class ProformaComponent {
   proformaShortList = this.mService.getProformaShortList(this.showDeactives);
   
   proformaDetail: Proforma | undefined;
+
+  dateExpirePicker: Date = new Date();
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.detailId = Number(this.route.snapshot.params["id"]);
@@ -475,5 +523,24 @@ export class ProformaComponent {
   }
 
   newProforma() {}
+
+  deleteMachine(id: number) {
+    console.log("delete machine from proforma");
+  }
+  editMachine(id: number) {
+    console.log("edit machine from proforma");
+  }
+  deletePart(id: number) {
+    console.log("delete part from proforma");
+  }
+  editPart(id: number) {
+    console.log("edit part from proforma");
+  }
+  deleteService(id: number) {
+    console.log("delete service from proforma");
+  }
+  editService(id: number) {
+    console.log("edit service from proforma");
+  }
 
 }
