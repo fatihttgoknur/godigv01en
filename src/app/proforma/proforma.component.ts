@@ -165,13 +165,15 @@ import { DatepickerComponent } from '../datepicker/datepicker.component';
                   <tbody>
                     @for (pMachine of proformaDetail?.machines; track pMachine; let idx = $index) {
                       <tr>
-                        <td>{{idx + 1}}</td>
-                        <td>
-                          {{ pMachine.machine.name }}
-                          @if (changeActive || newRecord) {
+                        <td>{{idx + 1}}
+                        @if (changeActive || newRecord) {
                             <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editMachine(pMachine.machine.id)" />
                             <img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteMachine(pMachine.machine.id)" />
                           }
+                        </td>
+                        <td>
+                          {{ pMachine.machine.name }}
+                          
                         </td>
                         <td class="alignRight">
                           @if (pMachine.listPriceBefore != pMachine.listPriceNow) {
