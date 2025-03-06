@@ -23,7 +23,6 @@ export class ProformaContentComponent {
   @Output() editContentSave = new EventEmitter<Proforma>();
 
   fEditingMachine: { machine: MachineModel, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number } | undefined;
-  //{ machine: MachineModel, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number }
   fEditingPart: { part: Part, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number} | undefined;
   fEditingService: {service: Service, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number} | undefined;
 
@@ -35,7 +34,7 @@ export class ProformaContentComponent {
     {
       fcEditingMachinePrice: new FormControl(0),
       fcEditingMachineQty: new FormControl(0),
-      fcEditingMachineTermin: new FormControl(0),
+      fcEditingMachineTermin: new FormControl(''),
       fcEditingMachineNewNote: new FormControl('')
     }
   )
@@ -44,6 +43,7 @@ export class ProformaContentComponent {
     
   }
   ngOnInit() {
+
     if (this.fEditingMachineId) {
       this.fEditingMachine = this.fEditingProforma?.machines?.find(pm => pm.machine.id === this.fEditingMachineId);
       this.fEditingContent = this.fEditingMachine;
@@ -52,7 +52,7 @@ export class ProformaContentComponent {
         {
           fcEditingMachinePrice: new FormControl(this.fEditingMachine?.unitPrice ?? 0),
           fcEditingMachineQty: new FormControl(this.fEditingMachine?.quantity ?? 0),
-          fcEditingMachineTermin: new FormControl(this.fEditingMachine?.terminDays ?? null),
+          fcEditingMachineTermin: new FormControl(this.fEditingMachine?.terminDays?.toString() ?? ''),
           fcEditingMachineNewNote: new FormControl('')
         }
       )
@@ -65,7 +65,7 @@ export class ProformaContentComponent {
         {
           fcEditingMachinePrice: new FormControl(this.fEditingPart?.unitPrice ?? 0),
           fcEditingMachineQty: new FormControl(this.fEditingPart?.quantity ?? 0),
-          fcEditingMachineTermin: new FormControl(this.fEditingPart?.terminDays ?? null),
+          fcEditingMachineTermin: new FormControl(this.fEditingPart?.terminDays?.toString() ?? ''),
           fcEditingMachineNewNote: new FormControl('')
         }
       )
@@ -74,12 +74,12 @@ export class ProformaContentComponent {
       this.fEditingService = this.fEditingProforma?.services?.find(ps => ps.service.id === this.fEditingServiceId);
       this.fEditingContent = this.fEditingService;
 
-      console.log("init: ", this.fEditingService?.terminDays);
+      if (this.fEditingService?.terminDays === undefined) {}
       this.fgEditingMachine = new FormGroup(
         {
           fcEditingMachinePrice: new FormControl(this.fEditingService?.unitPrice ?? 0),
           fcEditingMachineQty: new FormControl(this.fEditingService?.quantity ?? 0),
-          fcEditingMachineTermin: new FormControl(this.fEditingService?.terminDays ?? null),
+          fcEditingMachineTermin: new FormControl(this.fEditingService?.terminDays?.toString() ?? ''),
           fcEditingMachineNewNote: new FormControl('')
         }
       )
@@ -117,7 +117,6 @@ export class ProformaContentComponent {
     if (this.fEditingProforma && this.fEditingProforma.machines && this.fEditingMachine) {
       for (var mMachine of this.fEditingProforma?.machines) {
         if (mMachine.machine.id === this.fEditingMachine.machine.id) {
-          // mMachine = this.fEditingMachine.machine;
           let newUnitPrice = Number(this.fgEditingMachine.value.fcEditingMachinePrice);
           if (!newUnitPrice || isNaN(newUnitPrice)) newUnitPrice = mMachine.unitPrice;
 
@@ -177,19 +176,13 @@ export class ProformaContentComponent {
   giveTerminDays(): number | undefined {
     let newTerminDays;
     const myInput = this.fgEditingMachine.value.fcEditingMachineTermin;
-    console.log("tip amk", typeof(myInput))
-    if (typeof(myInput) === typeof('s')) {
-      if (Number(myInput) === 0) {
-        newTerminDays = 0;
-      }
-      else {
-        newTerminDays = undefined;
-      }
+
+    if (!myInput || myInput.length < 1 || isNaN(Number(myInput))) {
+      newTerminDays = undefined;
     }
     else {
       newTerminDays = Number(myInput);
     }
-    console.log("termin: ", newTerminDays);
     return newTerminDays;
   }
   deleteNote(note: string) {
