@@ -1,0 +1,92 @@
+<div class="css-content-main">
+    <h3>
+        İçerik düzenleme - 
+        @if (this.fEditingMachineId) {
+            Makine Düzenle
+        }
+        @else if (this.fEditingPartId) {
+            Parça Düzenle
+        }
+        @else if (this.fEditingServiceId) {
+            Servis Düzenle
+        }
+    </h3>
+    <form [formGroup]="fgEditingMachine">
+    @if (this.fEditingContent) {
+        <div class="css-content-machine container">
+            <div class="row">
+                <div class="col-md-3">
+                    @switch (fEditingContent) {
+                        @case (fEditingMachine) {
+                            Makine Modeli:
+                        }
+                        @case (fEditingPart) {
+                            Parça ismi:
+                        }
+                        @case (fEditingService) {
+                            Servis:
+                        }
+                    }
+                </div>
+                <div class="col-md-4">
+                    @switch (fEditingContent) {
+                        @case (fEditingMachine) {
+                            {{fEditingContent.machine.name}}
+                        }
+                        @case (fEditingPart) {
+                            {{fEditingContent.part.name}}
+                        }
+                        @case (fEditingService) {
+                            {{fEditingContent.service.name}}
+                        }
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">Liste Fiyatı:</div>
+                <div class="col-md-4">
+                    @if (fEditingContent.listPriceBefore != fEditingContent.listPriceNow) {
+                        {{fEditingContent.listPriceBefore}} |
+                    }
+                    {{ fEditingContent.listPriceNow }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">Birim Fiyat:</div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="formUnitPrice" placeholder="" formControlName="fcEditingMachinePrice">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">Adet:</div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="formQuantity" placeholder="" formControlName="fcEditingMachineQty">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">Termin:</div>
+                <div class="col-md-4 col-topla">
+                    <input type="text" class="form-control" id="formTermin" placeholder="0: stok, -1: onaydan sonra planlanacak" formControlName="fcEditingMachineTermin"><div> gün</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">Nolar:</div>
+                <div class="col-md-7 col-notlar">
+                    @for (note of fEditingContent.notes; track note) {
+                        <div class="css-col-note col-topla"><div>* {{note}}</div><img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteNote(note)" /></div>
+                    }
+                    <div class="css-col-note col-topla">
+                        <input type="text" class="form-control" id="formNewNote" placeholder="" formControlName="fcEditingMachineNewNote">
+                        <button class="btn btn-success" (click)="addNote()">Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+        <div class="css-div-buttons">
+            <button type="submit" class="btn btn-success" (click)="contentEditSave()">Kaydet</button>
+            <button type="button" class="btn btn-danger" (click)="contentEditCancel()">İptal</button>
+        </div>
+    </form>
+
+</div>

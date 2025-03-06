@@ -2,14 +2,15 @@ import { Component, inject, numberAttribute } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GodisService } from '../godis.service';
-import { Proforma } from '../godid';
+import { MachineModel, Part, Proforma, Service } from '../godid';
 import { CustomerComponent } from '../customer/customer.component';
 import { DatepickerComponent } from '../datepicker/datepicker.component';
+import { ProformaContentComponent } from '../proforma-content/proforma-content.component';
 
 
 @Component({
   selector: 'app-proforma',
-  imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent],
+  imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent, ProformaContentComponent],
   template: `
     <div class="proforma-main">
       @if (!this.detailId && this.detailId != 0) {
@@ -135,8 +136,9 @@ import { DatepickerComponent } from '../datepicker/datepicker.component';
                 </div>
                 <div class="row mb-3 css-nomar">
                   <label class="col-sm-3 col-form-label">İçerik:</label>
+
                   <div class="col-sm-7">
-                    @if (this.newRecord || this.changeActive) {
+                    @if ((this.newRecord || this.changeActive) && ! this.proformaContentEdit) {
                       <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         + Ekle
                       </button>
@@ -149,169 +151,176 @@ import { DatepickerComponent } from '../datepicker/datepicker.component';
                     }
                   </div>
                 </div>
-                <div class="outer css-inhalt">
-                <table class="table css-small-font">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Ürün / Servis</th>
-                      <th scope="col">Liste Fiyatı</th>
-                      <th scope="col">Birim Fiyat</th>
-                      <th scope="col">Adet</th>
-                      <th scope="col">Toplam</th>
-                      <th scope="col">Termin</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (pMachine of proformaDetail?.machines; track pMachine; let idx = $index) {
+                @if (!proformaContentEdit) {
+                  <div class="outer css-inhalt">
+                  <table class="table css-small-font">
+                    <thead>
                       <tr>
-                        <td>{{idx + 1}}
-                        @if (changeActive || newRecord) {
-                            <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editMachine(pMachine.machine.id)" />
-                            <img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteMachine(pMachine.machine.id)" />
-                          }
-                        </td>
-                        <td>
-                          {{ pMachine.machine.name }}
-                          
-                        </td>
-                        <td class="alignRight">
-                          @if (pMachine.listPriceBefore != pMachine.listPriceNow) {
-                            <span title="eski">
+                        <th scope="col">#</th>
+                        <th scope="col">Ürün / Servis</th>
+                        <th scope="col">Liste Fiyatı</th>
+                        <th scope="col">Birim Fiyat</th>
+                        <th scope="col">Adet</th>
+                        <th scope="col">Toplam</th>
+                        <th scope="col">Termin</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (pMachine of proformaDetail?.machines; track pMachine; let idx = $index) {
+                        <tr>
+                          <td>{{idx + 1}}
+                          @if (changeActive || newRecord) {
+                              <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editMachine(pMachine.machine.id)" />
+                              <img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteMachine(pMachine.machine.id)" />
+                            }
+                          </td>
+                          <td>
+                            {{ pMachine.machine.name }}
+                            
+                          </td>
+                          <td class="alignRight">
+                            @if (pMachine.listPriceBefore != pMachine.listPriceNow) {
+                              <span title="eski">
+                                {{pMachine.listPriceBefore}}
+                              </span>
+                                | 
+                              <span title="güncel">
+                                {{pMachine.listPriceNow}}
+                              </span>
+                            }
+                            @else {
                               {{pMachine.listPriceBefore}}
-                            </span>
-                              | 
-                            <span title="güncel">
-                              {{pMachine.listPriceNow}}
-                            </span>
+                            }
+                          </td>
+                          <td class="alignRight">{{ pMachine.unitPrice }}</td>
+                          <td class="alignRight">{{  pMachine.quantity }}</td>
+                          <td class="alignRight">{{ pMachine.unitPrice * pMachine.quantity }}</td>
+                          <td>
+                            {{ showTermin(pMachine.terminDays) }}
+                          </td>
+                        </tr>
+                        @if (pMachine.notes && pMachine.notes.length > 0) {
+                        <tr>
+                          <td></td>
+                          <td colspan="6">
+                            <div class="css-proforma-notes">
+                              @for (note of pMachine.notes; track note) {
+                                <div class="css-proforma-note">* {{note}}</div>
+                              }
+                            </div>
+                          </td>
+                        </tr>
+                        }
+                      }
+                      @for (pPart of proformaDetail?.parts; track pPart; let idx = $index) {
+                        <tr>
+                          <td>
+                            {{ (proformaDetail?.machines?.length ?? 0) + idx + 1 }}
+                            @if (changeActive || newRecord) {
+                              <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editPart(pPart.part.id)" />
+                              <img src="/images/delete.png" class="css-intable-img css-img-smll"title="Sil" (click)="deletePart(pPart.part.id)" />
+                            }
+                          </td>
+                          <td>
+                            {{ pPart.part.name }}
+                          </td>
+                          @if (pPart.listPriceBefore != pPart.listPriceNow) {
+                            <td class="alignRight">
+                              <span title="eski">{{ pPart.listPriceBefore }}</span> | 
+                              <span title="güncel">{{ pPart.listPriceNow }}</span>
+                            </td>
                           }
                           @else {
-                            {{pMachine.listPriceBefore}}
+                            <td class="alignRight">{{ pPart.listPriceBefore }}</td>
                           }
-                        </td>
-                        <td class="alignRight">{{ pMachine.unitPrice }}</td>
-                        <td class="alignRight">{{  pMachine.quantity }}</td>
-                        <td class="alignRight">{{ pMachine.unitPrice * pMachine.quantity }}</td>
-                        <td>
-                          {{ showTermin(pMachine.terminDays) }}
-                        </td>
-                      </tr>
-                      @if (pMachine.notes && pMachine.notes.length > 0) {
-                      <tr>
-                        <td></td>
-                        <td colspan="6">
-                          <div class="css-proforma-notes">
-                            @for (note of pMachine.notes; track note) {
-                              <div class="css-proforma-note">* {{note}}</div>
-                            }
-                          </div>
-                        </td>
-                      </tr>
-                      }
-                    }
-                    @for (pPart of proformaDetail?.parts; track pPart; let idx = $index) {
-                      <tr>
-                        <td>{{ (proformaDetail?.machines?.length ?? 0) + idx + 1 }}</td>
-                        <td>
-                          {{ pPart.part.name }}
-                          @if (changeActive || newRecord) {
-                            <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editPart(pPart.part.id)" />
-                            <img src="/images/delete.png" class="css-intable-img css-img-smll"title="Sil" (click)="deletePart(pPart.part.id)" />
-                          }
-                        </td>
-                        @if (pPart.listPriceBefore != pPart.listPriceNow) {
-                          <td class="alignRight">
-                            <span title="eski">{{ pPart.listPriceBefore }}</span> | 
-                            <span title="güncel">{{ pPart.listPriceNow }}</span>
+                          <td class="alignRight">{{  pPart.unitPrice }}</td>
+                          <td class="alignRight">{{  pPart.quantity }}</td>
+                          <td class="alignRight">{{ pPart.unitPrice * pPart.quantity }}</td>
+                          <td>
+                            {{ showTermin(pPart.terminDays) }}
                           </td>
-                        }
-                        @else {
-                          <td class="alignRight">{{ pPart.listPriceBefore }}</td>
-                        }
-                        <td class="alignRight">{{  pPart.unitPrice }}</td>
-                        <td class="alignRight">{{  pPart.quantity }}</td>
-                        <td class="alignRight">{{ pPart.unitPrice * pPart.quantity }}</td>
-                        <td>
-                          {{ showTermin(pPart.terminDays) }}
-                        </td>
-                      </tr>
-                      @if (pPart.notes && pPart.notes.length > 0 ) {
-                      <tr>
-                        <td></td>
-                        <td colspan="6">
-                          <div class="css-proforma-notes">
-                            @for (note of pPart.notes; track note) {
-                              <div class="css-proforma-note">* {{ note }}</div>
-                            }
-                          </div>
-                        </td>
-                      </tr>
-                      }
-                    }
-                    @for (pService of proformaDetail?.services; track pService; let idx = $index) {
-                      <tr>
-                        <td>
-                          {{ (proformaDetail?.machines?.length ?? 0) + (proformaDetail?.parts?.length ?? 0) + idx + 1 }}
-                        </td>
-                        <td>
-                          {{ pService.service.name }}
-                          @if (changeActive || newRecord) {
-                              <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editService(pService.service.id)" />
-                              <img src="/images/delete.png" class="css-intable-img css-img-smll"title="Sil" (click)="deleteService(pService.service.id)" />
-                          }
-                        </td>
-                        @if (pService.listPriceBefore != pService.listPriceNow) {
-                          <td class="alignRight">
-                          <span title="eski">{{ pService.listPriceBefore }}</span> | 
-                          <span title="güncel">{{ pService.listPriceNow }}</span>
+                        </tr>
+                        @if (pPart.notes && pPart.notes.length > 0 ) {
+                        <tr>
+                          <td></td>
+                          <td colspan="6">
+                            <div class="css-proforma-notes">
+                              @for (note of pPart.notes; track note) {
+                                <div class="css-proforma-note">* {{ note }}</div>
+                              }
+                            </div>
                           </td>
+                        </tr>
                         }
-                        @else {
-                          <td class="alignRight">{{ pService.listPriceBefore }}</td>
-                        }
-                        <td class="alignRight">{{ pService.unitPrice }}</td>
-                        <td class="alignRight">{{ pService.quantity }}</td>
-                        <td class="alignRight">{{ pService.unitPrice * pService.quantity }}</td>
-                        <td>
-                          {{ showTermin(pService.terminDays) }}
-                        </td>
-                      </tr>
-                      @if (pService.notes && pService.notes.length > 0) {
-                      <tr>
-                        <td></td>
-                        <td colspan="6">
-                          <div class="css-proforma-notes">
-                            @for (note of pService.notes; track note) {
-                              <div class="css-proforma-note">* {{ note }}</div>
-                            }
-                          </div>
-                        </td>
-                      </tr>
                       }
-                    }
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colspan="7"></td>
-                    </tr>
-                    <tr>
-                      <td class="css-td-right" colspan="5">Ara Toplam:</td>
-                      <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true): ''}} $</td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td class="css-td-right" colspan="5">İskonto:</td>
-                      <td class="alignRight">{{ proformaDetail?.percentDiscount ?? 0 }} %</td>
-                      <td></td>
-                    </tr>
-                    <tr class="css-bold">
-                      <td class="css-td-right" colspan="5">Genel Toplam:</td>
-                      <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail): ''}} $</td>
-                      <td></td>
-                    </tr>
-                  </tfoot>
-                </table>
-                </div>
+                      @for (pService of proformaDetail?.services; track pService; let idx = $index) {
+                        <tr>
+                          <td>
+                            {{ (proformaDetail?.machines?.length ?? 0) + (proformaDetail?.parts?.length ?? 0) + idx + 1 }}
+                            @if (changeActive || newRecord) {
+                                <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editService(pService.service.id)" />
+                                <img src="/images/delete.png" class="css-intable-img css-img-smll"title="Sil" (click)="deleteService(pService.service.id)" />
+                            }
+                          </td>
+                          <td>
+                            {{ pService.service.name }}
+                          </td>
+                          @if (pService.listPriceBefore != pService.listPriceNow) {
+                            <td class="alignRight">
+                            <span title="eski">{{ pService.listPriceBefore }}</span> | 
+                            <span title="güncel">{{ pService.listPriceNow }}</span>
+                            </td>
+                          }
+                          @else {
+                            <td class="alignRight">{{ pService.listPriceBefore }}</td>
+                          }
+                          <td class="alignRight">{{ pService.unitPrice }}</td>
+                          <td class="alignRight">{{ pService.quantity }}</td>
+                          <td class="alignRight">{{ pService.unitPrice * pService.quantity }}</td>
+                          <td>
+                            {{ showTermin(pService.terminDays) }}
+                          </td>
+                        </tr>
+                        @if (pService.notes && pService.notes.length > 0) {
+                        <tr>
+                          <td></td>
+                          <td colspan="6">
+                            <div class="css-proforma-notes">
+                              @for (note of pService.notes; track note) {
+                                <div class="css-proforma-note">* {{ note }}</div>
+                              }
+                            </div>
+                          </td>
+                        </tr>
+                        }
+                      }
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="7"></td>
+                      </tr>
+                      <tr>
+                        <td class="css-td-right" colspan="5">Ara Toplam:</td>
+                        <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true): ''}} $</td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td class="css-td-right" colspan="5">İskonto:</td>
+                        <td class="alignRight">{{ proformaDetail?.percentDiscount ?? 0 }} %</td>
+                        <td></td>
+                      </tr>
+                      <tr class="css-bold">
+                        <td class="css-td-right" colspan="5">Genel Toplam:</td>
+                        <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail): ''}} $</td>
+                        <td></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  </div>
+                }
+                @else {
+                  <app-proforma-content [fEditingProforma]="this.proformaDetailCopy" [fEditingMachineId]="this.contentEditingMachineId" [fEditingPartId]="this.contentEditingPartId" [fEditingServiceId]="this.contentEditingServiceId" (editContentCanceled)="this.cancelContentEdit($event)" (editContentSave)="this.editContentSave($event)" />
+                }
                 @if (proformaDetail && proformaDetail.notes && proformaDetail.notes.length + (N1var ? 1 : 0) > 0) {
                   <div class="row mb-3">
                   <label class="col-sm-3 col-form-label">Notlar:</label>
@@ -421,7 +430,7 @@ import { DatepickerComponent } from '../datepicker/datepicker.component';
     .css-img-xsmll{
       height: 17px;
     }
-    .css-img-smll, .css-img-xsmll {
+    /*.css-img-smll, .css-img-xsmll {
       display: none;
     }
 
@@ -432,6 +441,7 @@ import { DatepickerComponent } from '../datepicker/datepicker.component';
     td:hover .css-img-smll {
       display: inline;
     }
+      */
 
   `
 })
@@ -453,6 +463,8 @@ export class ProformaComponent {
   
   addableServices = [];
 
+  proformaContentEdit: boolean = false;
+
   fgShowDeleted = new FormGroup({
     fcShowDeleted: new FormControl(false)
   });
@@ -470,7 +482,17 @@ export class ProformaComponent {
   
   proformaDetail: Proforma | undefined;
 
+  proformaDetailCopy: Proforma | undefined;
+
   dateExpirePicker: Date = new Date();
+
+  contentEditingMachineId: number | undefined;
+  contentEditingPartId: number | undefined;
+  contentEditingServiceId: number | undefined;
+
+  contentNewMachine = false;
+  contentNewPart = false;
+  contentNewService = false
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.detailId = Number(this.route.snapshot.params["id"]);
@@ -496,6 +518,9 @@ export class ProformaComponent {
   }
 
   showTermin(terminDays?: number): string {
+
+    if(terminDays && isNaN(terminDays)) return "*";
+
     switch (terminDays) {
       case undefined:
         return '-';
@@ -522,6 +547,7 @@ export class ProformaComponent {
   changeCancel() {
     this.changeActive = false;
     this.proformaDetail = this.mService.getProformaDetails(this.detailId);
+    this.proformaContentEdit = false;
   }
 
   newProforma() {}
@@ -531,18 +557,38 @@ export class ProformaComponent {
   }
   editMachine(id: number) {
     console.log("edit machine from proforma");
+    this.proformaDetailCopy = structuredClone(this.proformaDetail);
+    this.proformaContentEdit = true;
+    this.contentEditingMachineId = id;
   }
   deletePart(id: number) {
     console.log("delete part from proforma");
   }
   editPart(id: number) {
     console.log("edit part from proforma");
+    this.proformaContentEdit = true;
+    this.contentEditingPartId = id;
+    this.proformaDetailCopy = structuredClone(this.proformaDetail);
   }
   deleteService(id: number) {
     console.log("delete service from proforma");
   }
   editService(id: number) {
     console.log("edit service from proforma");
+    this.proformaContentEdit = true;
+    this.contentEditingServiceId = id;
+    this.proformaDetailCopy = structuredClone(this.proformaDetail);
+  }
+
+  cancelContentEdit(mbool: boolean) {
+    this.contentEditingMachineId = undefined;
+    this.contentEditingPartId = undefined;
+    this.contentEditingServiceId = undefined;
+    this.proformaContentEdit = false;
+  }
+  editContentSave(mProforma: Proforma) {
+    this.proformaDetail = mProforma;
+    this.cancelContentEdit(false);
   }
 
 }
