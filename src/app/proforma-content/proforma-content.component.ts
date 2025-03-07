@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MachineModel, Part, Proforma, Service } from '../godid';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon'
+import { GodisService } from '../godis.service';
 
 @Component({
   selector: 'app-proforma-content',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIconModule, FormsModule],
   templateUrl: './proforma-content.component.html',
   styleUrl: './proforma-content.component.css'
 })
@@ -22,6 +24,8 @@ export class ProformaContentComponent {
   @Output() editContentCanceled = new EventEmitter<boolean>();
   @Output() editContentSave = new EventEmitter<Proforma>();
 
+  mService: GodisService = inject(GodisService);
+
   fEditingMachine: { machine: MachineModel, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number } | undefined;
   fEditingPart: { part: Part, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number} | undefined;
   fEditingService: {service: Service, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number} | undefined;
@@ -37,13 +41,29 @@ export class ProformaContentComponent {
       fcEditingMachineTermin: new FormControl(''),
       fcEditingMachineNewNote: new FormControl('')
     }
-  )
+  );
+
+  fSelectableNewMachines: MachineModel[] | undefined;
+  fSelectableNewMachinesFiltered: MachineModel[] | undefined;
+
+  fSelectableNewParts: Part[] | undefined;
+  fSelectableNewPartsFiltered: Part[] | undefined;
+  fSelectableNewPartFilterMachines: MachineModel[] | undefined;
+
+  fSelectableNewServices: Service[] | undefined;
+  fSelectableNewServicesFiltered: Service[] | undefined;
+
+  machineFilterText: string | undefined;
+  partMachineFilterText: string | undefined;
+
+  partFilterMachines: MachineModel[] | undefined;
+  partFilterMachinesSelectedList: MachineModel[] | undefined;
 
   constructor() {
     
   }
   ngOnInit() {
-
+    console.log(this.fNewMachine, this.fNewPart, this.fNewService)
     if (this.fEditingMachineId) {
       this.fEditingMachine = this.fEditingProforma?.machines?.find(pm => pm.machine.id === this.fEditingMachineId);
       this.fEditingContent = this.fEditingMachine;
@@ -84,6 +104,28 @@ export class ProformaContentComponent {
         }
       )
     }
+    else if (this.fNewMachine) {
+      const fAllMachines = this.mService.getAllMachineModels();
+      let filteredMachines = fAllMachines;
+      if (this.fEditingProforma?.machines) {
+        for (var machine of this.fEditingProforma?.machines) {
+          filteredMachines = filteredMachines?.filter(fm => fm.id != machine.machine.id);
+        }
+      }
+      this.fSelectableNewMachines = filteredMachines;
+      this.fSelectableNewMachinesFiltered = this.fSelectableNewMachines;
+    }
+    else if (this.fNewPart) {
+      const fAllParts = this.mService.getAllParts();
+      let filteredParts = fAllParts;
+      if(this.fEditingProforma?.parts) {
+        for (var myPart of this.fEditingProforma.parts) {
+          filteredParts = filteredParts?.filter(fp => fp.id != myPart.part.id);
+        }
+      }
+      this.fSelectableNewParts = filteredParts;
+      this.fSelectableNewPartsFiltered = this.fSelectableNewParts;
+    }
     
   }
 
@@ -111,6 +153,44 @@ export class ProformaContentComponent {
     this.fEditingPart = undefined;
     this.fEditingService = undefined;
     this.editContentCanceled.emit(true);
+  }
+  contentNewSave() {
+    // NEW MACHİNE
+    if (this.fNewMachine) {
+
+      let newUnitPrice = Number(this.fgEditingMachine.value.fcEditingMachinePrice);
+      if (!newUnitPrice || isNaN(newUnitPrice)) {
+        console.log("Program error. Unit price coudn't defined");
+        return;
+      };
+
+      let newQuantity = Number(this.fgEditingMachine.value.fcEditingMachineQty);
+      if(!newQuantity || isNaN(newQuantity)) {
+        console.log("Program error. Quantity coudn't defined while new machine adding");
+        return;
+      };
+
+      let newTerminDays: number | undefined = Number(this.fgEditingMachine.value.fcEditingMachineTermin);
+      
+      if (this.fgEditingMachine.value.fcEditingMachineTermin === undefined) newTerminDays = undefined;
+      else newTerminDays = Number(this.fgEditingMachine.value.fcEditingMachineTermin);
+
+      if (!this.fEditingMachine) {
+        console.log("Program error while new machine setting.");
+        return;
+      }
+      this.fEditingMachine.quantity = newQuantity;
+      this.fEditingMachine.unitPrice = newUnitPrice;
+      this.fEditingMachine.terminDays = newTerminDays;
+
+      this.fEditingProforma?.machines?.push(this.fEditingMachine);
+      
+    }
+
+    this.editContentSave.emit(this.fEditingProforma);
+    this.fEditingMachine = undefined;
+    this.fEditingPart = undefined;
+    this.fEditingService = undefined;
   }
   contentEditSave() {
     // EDIT MACHINES
@@ -195,6 +275,52 @@ export class ProformaContentComponent {
     else if (this.fEditingService) {
       this.fEditingService.notes = this.fEditingService.notes?.filter(snote => snote != note);
     }
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    console.log("changes detected")
+  }
+  filterInputChanging(event: Event) {
+    let myText = this.machineFilterText;
+
+    if (myText && myText.length > 1) {
+      this.fSelectableNewMachinesFiltered = this.fSelectableNewMachines?.filter(mm => (mm.name.toLocaleLowerCase().includes(myText.toLocaleLowerCase()))  || (mm.abbreviation.toLocaleLowerCase().includes(myText.toLocaleLowerCase())));
+    }
+    else {
+      this.fSelectableNewMachinesFiltered = this.fSelectableNewMachines;
+    }
+  }
+  partFilterInputChanging(event: Event) {
+    console.log("i am changing")
+    let myText = this.partMachineFilterText;
+    if (myText && myText.length > 1) {
+      this.partFilterMachines = this.mService.getAllMachineModels()?.filter(mm => (mm.name.toLocaleLowerCase().includes(myText.toLocaleLowerCase())) || (mm.abbreviation.toLocaleLowerCase().includes(myText.toLocaleLowerCase())));
+    }
+    else {
+      this.partFilterMachines = this.mService.getAllMachineModels();
+    }
+  }
+  newMachineModelPicked(myModel: MachineModel) {
+    const myLP = this.mService.getProformaListPrice(0,myModel.id, new Date());
+    this.fEditingContent = {
+      machine: myModel,
+      unitPrice: 1,
+      quantity: 1,
+      listPriceBefore: myLP.before,
+      listPriceNow: myLP.now,
+    }
+    this.fEditingMachine = this.fEditingContent;
+  }
+  newPartPicked(myPart: Part) {
+    const myLP = this.mService.getProformaListPrice(1, myPart.id, new Date());
+    //{ part: Part, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number}
+    this.fEditingPart = {
+      part: myPart,
+      unitPrice: 1,
+      quantity: 1,
+      listPriceBefore: myLP.before,
+      listPriceNow: myLP.now
+    }
+    this.fEditingContent = this.fEditingPart;
   }
 
 }

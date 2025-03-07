@@ -39,3 +39,27 @@
     font-size: x-small;
     line-height: 20px;
 }
+.css-model {
+    padding: 3px 10px;
+    margin: 5px 5px;
+    background-color: rgba(179, 174, 174, 0.3);
+    cursor:pointer;
+    border-radius: 10px;
+}
+.css-model:hover {
+    background-color: rgba(201, 100, 100, 0.3);
+}
+.css-input-width1 {
+    width: 250px !important;
+    display: flex;
+    justify-content: center;
+}
+.css-filter-row {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+.mbf-3 {
+    display: flex;
+    margin-bottom: 0px;
+}

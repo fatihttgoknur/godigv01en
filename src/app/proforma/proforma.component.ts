@@ -144,9 +144,9 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                       </button>
                       <div class="dropdown-menu">
                           <!--<div class="dropdown-divider"></div>-->
-                          <a class="dropdown-item" style="cursor: pointer;">Makine</a>
-                          <a class="dropdown-item" style="cursor: pointer;">Parça</a>
-                          <a class="dropdown-item" style="cursor: pointer;">Servis</a>
+                          <a class="dropdown-item" style="cursor: pointer;" (click)="addMachine()">Makine</a>
+                          <a class="dropdown-item" style="cursor: pointer;" (click)="addPart()">Parça</a>
+                          <a class="dropdown-item" style="cursor: pointer;" (click)="addService()">Servis</a>
                       </div>
                     }
                   </div>
@@ -319,7 +319,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                   </div>
                 }
                 @else {
-                  <app-proforma-content [fEditingProforma]="this.proformaDetailCopy" [fEditingMachineId]="this.contentEditingMachineId" [fEditingPartId]="this.contentEditingPartId" [fEditingServiceId]="this.contentEditingServiceId" (editContentCanceled)="this.cancelContentEdit($event)" (editContentSave)="this.editContentSave($event)" />
+                  <app-proforma-content [fEditingProforma]="this.proformaDetailCopy" [fEditingMachineId]="this.contentEditingMachineId" [fEditingPartId]="this.contentEditingPartId" [fEditingServiceId]="this.contentEditingServiceId" (editContentCanceled)="this.cancelContentEdit($event)" (editContentSave)="this.editContentSave($event)" [fNewMachine]="this.contentNewMachine" [fNewPart]="contentNewPart" [fNewService]="contentNewService" />
                 }
                 @if (proformaDetail && proformaDetail.notes && proformaDetail.notes.length + (N1var ? 1 : 0) > 0) {
                   <div class="row mb-3">
@@ -552,6 +552,11 @@ export class ProformaComponent {
 
   newProforma() {}
 
+  addMachine() {
+    this.proformaDetailCopy = structuredClone(this.proformaDetail);
+    this.proformaContentEdit = true;
+    this.contentNewMachine = true;
+  }
   deleteMachine(id: number) {
     console.log("delete machine from proforma");
   }
@@ -561,6 +566,11 @@ export class ProformaComponent {
     this.proformaContentEdit = true;
     this.contentEditingMachineId = id;
   }
+  addPart() {
+    this.proformaDetailCopy = structuredClone(this.proformaDetail);
+    this.proformaContentEdit = true;
+    this.contentNewPart = true;
+  }
   deletePart(id: number) {
     console.log("delete part from proforma");
   }
@@ -569,6 +579,11 @@ export class ProformaComponent {
     this.proformaContentEdit = true;
     this.contentEditingPartId = id;
     this.proformaDetailCopy = structuredClone(this.proformaDetail);
+  }
+  addService() {
+    this.proformaDetailCopy = structuredClone(this.proformaDetail);
+    this.proformaContentEdit = true;
+    this.contentNewService = true;
   }
   deleteService(id: number) {
     console.log("delete service from proforma");
@@ -584,6 +599,9 @@ export class ProformaComponent {
     this.contentEditingMachineId = undefined;
     this.contentEditingPartId = undefined;
     this.contentEditingServiceId = undefined;
+    this.contentNewMachine = false;
+    this.contentNewPart = false;
+    this.contentNewService = false;
     this.proformaContentEdit = false;
   }
   editContentSave(mProforma: Proforma) {

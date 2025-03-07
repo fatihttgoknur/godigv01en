@@ -519,7 +519,9 @@ export class GodisService {
   giveNumberCommas(x: number): string {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-
+  getAllParts(): Part[] | undefined {
+    return this.parts;
+  }
   getPartShortList(): {partId: number, partCode: string, partName: string, price: number, active: boolean}[] | undefined {
     let mReturn: {partId: number, partCode: string, partName: string, price: number, active: boolean}[] = [];
 

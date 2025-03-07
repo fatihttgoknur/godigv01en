@@ -10,6 +10,9 @@
         @else if (this.fEditingServiceId) {
             Servis Düzenle
         }
+        @else if (this.fNewMachine) {
+            Makine Ekle
+        }
     </h3>
     <form [formGroup]="fgEditingMachine">
     @if (this.fEditingContent) {
@@ -86,11 +89,49 @@
                 </div>
             </div>
         </div>
-    }
         <div class="css-div-buttons">
-            <button type="submit" class="btn btn-success" (click)="contentEditSave()">Kaydet</button>
+            @if (!this.fNewMachine && !this.fNewPart && !this.fNewService) {
+                <button type="submit" class="btn btn-success" (click)="contentEditSave()">Kaydet</button>
+            }
+            @else {
+                <button type="submit" class="btn btn-success" (click)="contentNewSave()">Kaydet</button>
+            }
             <button type="button" class="btn btn-danger" (click)="contentEditCancel()">İptal</button>
         </div>
+    }
+    @else if (fNewMachine) {
+        <div>
+            <div class="input-group mb-3">
+                <input [(ngModel)]="machineFilterText" type="text" class="form-control" placeholder="makine ismi veya kodu girin" aria-label="Username" (input)="filterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
+                </div>
+            </div>
+            <div class="css-model-list">
+                @for (fMachineModel of this.fSelectableNewMachinesFiltered; track fMachineModel; let idx = $index) {
+                    @if (idx < 10) {
+                        <div class="css-model" (click)="newMachineModelPicked(fMachineModel)">{{fMachineModel.name}}</div>
+                    }
+                }
+                @if (this.fSelectableNewMachinesFiltered && this.fSelectableNewMachinesFiltered.length && this.fSelectableNewMachinesFiltered.length > 10) {
+                    <div style="margin: 0 20px;">...</div>
+                }
+            </div>
+        </div>
+    }
+    @else if (fNewPart) {
+        <div class="css-filter-row">
+            <div>Makineye göre filtrele:</div>
+            <div class="css-input-width1">
+                <div class="input-group mbf-3">
+                    <input [(ngModel)]="partMachineFilterText" type="text" class="form-control" placeholder="makine ismi veya kodu girin" aria-label="Username" (input)="partFilterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
     </form>
 
 </div>
