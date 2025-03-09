@@ -13,6 +13,9 @@
         @else if (this.fNewMachine) {
             Makine Ekle
         }
+        @else if (this.fNewPart) {
+            Parça Ekle
+        }
     </h3>
     <form [formGroup]="fgEditingMachine">
     @if (this.fEditingContent) {
@@ -123,8 +126,42 @@
         <div class="css-filter-row">
             <div>Makineye göre filtrele:</div>
             <div class="css-input-width1">
+                @if (this.partMachineFiltering) {
+                    <div class="css-par-machine-filter-div">
+                        @for (mMachine of this.partFilterMachines; track mMachine) {
+                            <div class="css-model" (click)="newPartMachinePicked(mMachine)">{{mMachine.name}}</div>
+                        }
+                    </div>
+                }
                 <div class="input-group mbf-3">
-                    <input [(ngModel)]="partMachineFilterText" type="text" class="form-control" placeholder="makine ismi veya kodu girin" aria-label="Username" (input)="partFilterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+                    <input [(ngModel)]="partMachineFilterText" (focus)="partMachineFilterFocused()" (blur)="partMachineFilterBlur()" id="partMachineFilterInput" type="text" class="form-control" placeholder="makine ismi veya kodu girin" aria-label="Username" (input)="partFilterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="css-filter-row">
+            <div class="css-filter-picked-main">
+                @for (mMachine of this.partFilterMachinesSelectedList; track mMachine) {
+                    
+                    <div class="css-filter-picked-element-main">
+                        <div class="css-filter-picked-element">
+                            {{mMachine.name}}
+                        </div>
+                        <div class="css-filter-picked-element-delete">
+                            <img src="/images/cross.png" class="css-intable-img css-img-smll" title="Sil" (click)="partMachinePickedDelete(mMachine.id)" />
+                        </div>
+                    </div>
+                    
+                }
+            </div>
+        </div>
+        <div class="css-filter-row">
+            <div>İsim ara:</div>
+            <div class="css-input-group-part-name">
+                <div class="input-group mbf-3">
+                    <input [(ngModel)]="partNameFilterText" id="partFilterInput" type="text" class="form-control" placeholder="parça ismi girin" aria-label="part name" (input)="partFilterNameChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
                     </div>

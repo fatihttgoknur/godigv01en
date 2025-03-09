@@ -53,13 +53,49 @@
     width: 250px !important;
     display: flex;
     justify-content: center;
+    position: relative;
 }
 .css-filter-row {
     display: flex;
     align-items: center;
     justify-items: center;
+    margin-top: 10px;
 }
 .mbf-3 {
     display: flex;
     margin-bottom: 0px;
+}
+.css-par-machine-filter-div {
+    position: absolute;
+    background-color: white;
+    min-width: 400px;
+    top: 30px;
+    left: 20px;
+    z-index: 201;
+}
+.css-filter-picked-main {
+    display: flex; 
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 100px;
+}
+.css-filter-picked-element-main {
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    background-color: rgba(100, 172, 201, 0.3);
+    padding: 5px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.css-filter-picked-element-main img {
+    height: 14px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.css-filter-picked-element-main:hover {
+    font-weight: bold;
+}
+.css-input-group-part-name {
+    width: 300px;
 }

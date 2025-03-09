@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { MachineModel, Part, Proforma, Service } from '../godid';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon'
@@ -55,11 +55,14 @@ export class ProformaContentComponent {
 
   machineFilterText: string | undefined;
   partMachineFilterText: string | undefined;
+  partNameFilterText: string | undefined;
 
   partFilterMachines: MachineModel[] | undefined;
   partFilterMachinesSelectedList: MachineModel[] | undefined;
 
-  constructor() {
+  partMachineFiltering: boolean = false;
+
+  constructor(private elementRef: ElementRef<HTMLElement>) {
     
   }
   ngOnInit() {
@@ -289,8 +292,7 @@ export class ProformaContentComponent {
       this.fSelectableNewMachinesFiltered = this.fSelectableNewMachines;
     }
   }
-  partFilterInputChanging(event: Event) {
-    console.log("i am changing")
+  partFilterInputChanging(event: Event | undefined) {
     let myText = this.partMachineFilterText;
     if (myText && myText.length > 1) {
       this.partFilterMachines = this.mService.getAllMachineModels()?.filter(mm => (mm.name.toLocaleLowerCase().includes(myText.toLocaleLowerCase())) || (mm.abbreviation.toLocaleLowerCase().includes(myText.toLocaleLowerCase())));
@@ -298,7 +300,14 @@ export class ProformaContentComponent {
     else {
       this.partFilterMachines = this.mService.getAllMachineModels();
     }
+
+    if (this.partFilterMachinesSelectedList) {
+      for (var mMachine of this.partFilterMachinesSelectedList) {
+        this.partFilterMachines = this.partFilterMachines?.filter(pfm => pfm.id != mMachine.id);
+      }
+    }
   }
+  partFilterNameChanging(event: Event) {}
   newMachineModelPicked(myModel: MachineModel) {
     const myLP = this.mService.getProformaListPrice(0,myModel.id, new Date());
     this.fEditingContent = {
@@ -321,6 +330,28 @@ export class ProformaContentComponent {
       listPriceNow: myLP.now
     }
     this.fEditingContent = this.fEditingPart;
+  }
+  partMachineFilterFocused() {
+    this.partFilterInputChanging(undefined);
+    this.partMachineFiltering = true;
+  }
+  partMachineFilterBlur() {
+    setTimeout(() => {
+      this.partMachineFiltering = false;
+    }, 100);
+  }
+  newPartMachinePicked(mModel: MachineModel) {
+    this.partFilterMachinesSelectedList ? this.partFilterMachinesSelectedList?.push(mModel) : this.partFilterMachinesSelectedList = [mModel];
+    this.partMachineFilterText = "";
+    this.partFilterInputChanging(undefined);
+    
+  }
+  partMachinePickedDelete(mModelId: number) {
+    if (this.partFilterMachinesSelectedList) {
+      this.partFilterMachinesSelectedList = this.partFilterMachinesSelectedList.filter(sm => sm.id != mModelId);
+    }
+    this.partMachineFilterText = "";
+    this.partFilterInputChanging(undefined);
   }
 
 }
