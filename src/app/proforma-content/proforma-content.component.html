@@ -1,7 +1,7 @@
 <div class="css-content-main">
     <h3>
         İçerik düzenleme - 
-        @if (this.fEditingMachineId) {
+        @if (this.fEditingMachineId || this.fEditingMachineId === 0) {
             Makine Düzenle
         }
         @else if (this.fEditingPartId) {
@@ -15,6 +15,9 @@
         }
         @else if (this.fNewPart) {
             Parça Ekle
+        }
+        @else if (this.fNewService) {
+            Servis Ekle
         }
     </h3>
     <form [formGroup]="fgEditingMachine">
@@ -80,14 +83,17 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">Nolar:</div>
+                <div class="col-md-3">Notlar:</div>
                 <div class="col-md-7 col-notlar">
+                    @if (!fEditingContent.notes || (fEditingContent.notes.length < 1)) {
+                        <span style="font-style: italic; font-size: smaller;">henüz not yok</span>
+                    }
                     @for (note of fEditingContent.notes; track note) {
                         <div class="css-col-note col-topla"><div>* {{note}}</div><img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteNote(note)" /></div>
                     }
                     <div class="css-col-note col-topla">
                         <input type="text" class="form-control" id="formNewNote" placeholder="" formControlName="fcEditingMachineNewNote">
-                        <button class="btn btn-success" (click)="addNote()">Ekle</button>
+                        <button class="btn btn-info" (click)="addNote()">Ekle</button>
                     </div>
                 </div>
             </div>
@@ -123,9 +129,9 @@
         </div>
     }
     @else if (fNewPart) {
-        <div class="css-filter-row">
-            <div>Makineye göre filtrele:</div>
-            <div class="css-input-width1">
+        <div class="css-filter-row row">
+            <div class="col-3">Makineye göre filtrele:</div>
+            <div class="css-input-width1 col">
                 @if (this.partMachineFiltering) {
                     <div class="css-par-machine-filter-div">
                         @for (mMachine of this.partFilterMachines; track mMachine) {
@@ -141,8 +147,9 @@
                 </div>
             </div>
         </div>
-        <div class="css-filter-row">
-            <div class="css-filter-picked-main">
+        <div class="css-filter-row row">
+            <div class="col-3"></div>
+            <div class="css-filter-picked-main col">
                 @for (mMachine of this.partFilterMachinesSelectedList; track mMachine) {
                     
                     <div class="css-filter-picked-element-main">
@@ -157,15 +164,41 @@
                 }
             </div>
         </div>
-        <div class="css-filter-row">
-            <div>İsim ara:</div>
-            <div class="css-input-group-part-name">
+        <div class="css-filter-row row">
+            <div class="col-3">İsim ara:</div>
+            <div class="css-input-group-part-name col">
                 <div class="input-group mbf-3">
                     <input [(ngModel)]="partNameFilterText" id="partFilterInput" type="text" class="form-control" placeholder="parça ismi girin" aria-label="part name" (input)="partFilterNameChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="css-filter-row row">
+            <div class="col">
+                @for (fPart of this.partsFiltered; track fPart; let idx = $index) {
+                    @if (idx < 10) {
+                        <div class="css-model" (click)="newPartPicked(fPart)">{{fPart.name}}</div>
+                    }
+                    @if (idx > 10 && idx + 1 === partsFiltered?.length) {
+                       <div>...</div> 
+                    }
+                }
+            </div>
+        </div>
+    }
+    @else if (fNewService) {
+        <div class="css-filter-row row">
+            <div class="col">
+                @for (fService of this.fServices; track fService; let idx = $index) {
+                    @if (idx < 20) {
+                        <div class="css-model" (click)="newServicePicked(fService)">{{fService.name}}</div>
+                    }
+                    @if (idx > 20 && idx + 1 === partsFiltered?.length) {
+                       <div>...</div> 
+                    }
+                }
             </div>
         </div>
     }

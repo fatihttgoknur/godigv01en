@@ -61,13 +61,16 @@ export class ProformaContentComponent {
   partFilterMachinesSelectedList: MachineModel[] | undefined;
 
   partMachineFiltering: boolean = false;
+  partsFiltered: Part[] | undefined;
+
+  fServices: Service[] | undefined;
 
   constructor(private elementRef: ElementRef<HTMLElement>) {
     
   }
   ngOnInit() {
     console.log(this.fNewMachine, this.fNewPart, this.fNewService)
-    if (this.fEditingMachineId) {
+    if (this.fEditingMachineId || this.fEditingMachineId === 0) {
       this.fEditingMachine = this.fEditingProforma?.machines?.find(pm => pm.machine.id === this.fEditingMachineId);
       this.fEditingContent = this.fEditingMachine;
 
@@ -80,7 +83,7 @@ export class ProformaContentComponent {
         }
       )
     }
-    else if (this.fEditingPartId) {
+    else if (this.fEditingPartId || this.fEditingPartId === 0) {
       this.fEditingPart = this.fEditingProforma?.parts?.find(pp => pp.part.id === this.fEditingPartId);
       this.fEditingContent = this.fEditingPart;
 
@@ -93,7 +96,7 @@ export class ProformaContentComponent {
         }
       )
     }
-    else if (this.fEditingServiceId) {
+    else if (this.fEditingServiceId || this.fEditingServiceId === 0) {
       this.fEditingService = this.fEditingProforma?.services?.find(ps => ps.service.id === this.fEditingServiceId);
       this.fEditingContent = this.fEditingService;
 
@@ -128,6 +131,10 @@ export class ProformaContentComponent {
       }
       this.fSelectableNewParts = filteredParts;
       this.fSelectableNewPartsFiltered = this.fSelectableNewParts;
+      this.filterPart();
+    }
+    else if (this.fNewService) {
+      this.fServices = this.mService.getServiceList();
     }
     
   }
@@ -158,25 +165,25 @@ export class ProformaContentComponent {
     this.editContentCanceled.emit(true);
   }
   contentNewSave() {
-    // NEW MACHİNE
+    let newUnitPrice = Number(this.fgEditingMachine.value.fcEditingMachinePrice);
+    if (!newUnitPrice || isNaN(newUnitPrice)) {
+      console.log("Program error. Unit price coudn't defined");
+      return;
+    };
+
+    let newQuantity = Number(this.fgEditingMachine.value.fcEditingMachineQty);
+    if(!newQuantity || isNaN(newQuantity)) {
+      console.log("Program error. Quantity coudn't defined while new machine adding");
+      return;
+    };
+
+    let newTerminDays: number | undefined = Number(this.fgEditingMachine.value.fcEditingMachineTermin);
+    
+    if (this.fgEditingMachine.value.fcEditingMachineTermin === undefined) newTerminDays = undefined;
+    else newTerminDays = Number(this.fgEditingMachine.value.fcEditingMachineTermin);
+    
+    // NEW MACHINE
     if (this.fNewMachine) {
-
-      let newUnitPrice = Number(this.fgEditingMachine.value.fcEditingMachinePrice);
-      if (!newUnitPrice || isNaN(newUnitPrice)) {
-        console.log("Program error. Unit price coudn't defined");
-        return;
-      };
-
-      let newQuantity = Number(this.fgEditingMachine.value.fcEditingMachineQty);
-      if(!newQuantity || isNaN(newQuantity)) {
-        console.log("Program error. Quantity coudn't defined while new machine adding");
-        return;
-      };
-
-      let newTerminDays: number | undefined = Number(this.fgEditingMachine.value.fcEditingMachineTermin);
-      
-      if (this.fgEditingMachine.value.fcEditingMachineTermin === undefined) newTerminDays = undefined;
-      else newTerminDays = Number(this.fgEditingMachine.value.fcEditingMachineTermin);
 
       if (!this.fEditingMachine) {
         console.log("Program error while new machine setting.");
@@ -188,6 +195,30 @@ export class ProformaContentComponent {
 
       this.fEditingProforma?.machines?.push(this.fEditingMachine);
       
+    }// NEW PART
+    else if (this.fNewPart) {
+      if(!this.fEditingPart) {
+        console.log("Program error while new part setting");
+        return;
+      }
+
+      this.fEditingPart.quantity = newQuantity;
+      this.fEditingPart.unitPrice = newUnitPrice;
+      this.fEditingPart.terminDays = newTerminDays;
+
+      this.fEditingProforma?.parts?.push(this.fEditingPart);
+    }
+    else if (this.fNewService) {
+      if(!this.fEditingService) {
+        console.log("Program error while new service setting");
+        return;
+      }
+
+      this.fEditingService.quantity = newQuantity;
+      this.fEditingService.unitPrice = newUnitPrice;
+      this.fEditingService.terminDays = newTerminDays;
+
+      this.fEditingProforma?.services?.push(this.fEditingService);
     }
 
     this.editContentSave.emit(this.fEditingProforma);
@@ -255,6 +286,9 @@ export class ProformaContentComponent {
     this.fEditingMachine = undefined;
     this.fEditingPart = undefined;
     this.fEditingService = undefined;
+    this.fNewMachine = false;
+    this.fNewPart = false;
+    this.fNewService = false;
   }
   giveTerminDays(): number | undefined {
     let newTerminDays;
@@ -307,7 +341,42 @@ export class ProformaContentComponent {
       }
     }
   }
-  partFilterNameChanging(event: Event) {}
+  partFilterNameChanging(event: Event) {
+    this.filterPart();
+  }
+  filterPart() {
+    let allParts = this.mService.getAllParts();
+    this.partsFiltered = [];
+
+    // BY SELECTED MACHINES
+    if (this.partFilterMachinesSelectedList && this.partFilterMachinesSelectedList.length > 0) {
+      for (var mMachineModel of this.partFilterMachinesSelectedList) {
+        let mFParts = allParts?.filter(p=> p.inMachineModels?.includes(mMachineModel));
+        
+        if (allParts) {
+          for (var pPart of allParts) {
+            if (pPart.inMachineModels) {
+              for (var mModel of pPart.inMachineModels) {
+                if (mModel.id === mMachineModel.id) {
+                  if (!this.partsFiltered?.includes(pPart)) {
+                    this.partsFiltered?.push(pPart);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    else {
+      this.partsFiltered = allParts;
+    }
+
+    // BY NAME
+    if (this.partNameFilterText) {
+      this.partsFiltered = this.partsFiltered?.filter(p => p.name.toLocaleLowerCase().includes(this.partNameFilterText ? this.partNameFilterText.toLocaleLowerCase() : ''))
+    }
+  }
   newMachineModelPicked(myModel: MachineModel) {
     const myLP = this.mService.getProformaListPrice(0,myModel.id, new Date());
     this.fEditingContent = {
@@ -321,7 +390,6 @@ export class ProformaContentComponent {
   }
   newPartPicked(myPart: Part) {
     const myLP = this.mService.getProformaListPrice(1, myPart.id, new Date());
-    //{ part: Part, unitPrice: number, quantity: number, listPriceBefore?: number, listPriceNow?: number, notes?: string[], terminDays?: number}
     this.fEditingPart = {
       part: myPart,
       unitPrice: 1,
@@ -338,12 +406,13 @@ export class ProformaContentComponent {
   partMachineFilterBlur() {
     setTimeout(() => {
       this.partMachineFiltering = false;
-    }, 100);
+    }, 150);
   }
   newPartMachinePicked(mModel: MachineModel) {
     this.partFilterMachinesSelectedList ? this.partFilterMachinesSelectedList?.push(mModel) : this.partFilterMachinesSelectedList = [mModel];
     this.partMachineFilterText = "";
     this.partFilterInputChanging(undefined);
+    this.filterPart();
     
   }
   partMachinePickedDelete(mModelId: number) {
@@ -352,6 +421,18 @@ export class ProformaContentComponent {
     }
     this.partMachineFilterText = "";
     this.partFilterInputChanging(undefined);
+    this.filterPart();
+  }
+  newServicePicked(mService: Service) {
+    const myLP = this.mService.getProformaListPrice(2, mService.id, new Date());
+    this.fEditingService = {
+      service: mService,
+      unitPrice: 1,
+      quantity: 1,
+      listPriceBefore: myLP.before,
+      listPriceNow: myLP.now
+    }
+    this.fEditingContent = this.fEditingService;
   }
 
 }

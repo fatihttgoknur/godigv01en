@@ -1,5 +1,5 @@
 import { Component, inject, numberAttribute } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GodisService } from '../godis.service';
 import { MachineModel, Part, Proforma, Service } from '../godid';
@@ -10,7 +10,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
 
 @Component({
   selector: 'app-proforma',
-  imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent, ProformaContentComponent],
+  imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent, ProformaContentComponent, FormsModule],
   template: `
     <div class="proforma-main">
       @if (!this.detailId && this.detailId != 0) {
@@ -104,7 +104,6 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
         <section>
           <h2>Proforma #{{ this.proformaDetail?.id }}, {{proformaDetail?.customer?.name}}</h2>
           <div class="css-div-form">
-            <!--<form [formGroup]="fgEditMachineModel" (submit)="editMachineModel()">-->
               <form>
                 <div class="row mb-3 css-nomar">
                   <label class="col-sm-3 col-form-label">Tarih:</label>
@@ -323,16 +322,26 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                 }
                 @if (proformaDetail && proformaDetail.notes && proformaDetail.notes.length + (N1var ? 1 : 0) > 0) {
                   <div class="row mb-3">
-                  <label class="col-sm-3 col-form-label">Notlar:</label>
-                  <div class="col-sm-9">
-                    @if (this.N1var) {
-                      <div class="css-proforma-note">**N1: siparişten sonra programlanacaktır.</div>
-                    }
-                    @for (note of proformaDetail.notes; track note) {
-                      <div class="css-proforma-note">* {{note}}</div>
-                    }
+                    <label class="col-sm-3 col-form-label">Notlar:</label>
+                    <div class="col-sm-9">
+                      @if (this.N1var) {
+                        <div class="css-proforma-note">**N1: siparişten sonra programlanacaktır.</div>
+                      }
+                      @for (note of proformaDetail.notes; track note) {
+                        <div class="css-note-main">
+                          <div class="css-proforma-note">* {{note}}</div>
+                          @if (changeActive) {
+                          <img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteNote(note)" />
+                          }
+                        </div>
+                      }
+                      @if (changeActive) {
+                        <div class="css-note-main"><input type="text" class="form-control" id="formNewNote" placeholder="" [(ngModel)]="proformaNewNoteText" [ngModelOptions]="{standalone: true}">
+                        <button class="btn btn-info" (click)="addNote()">Ekle</button></div>
+                      }
+                    </div>
                   </div>
-                </div>
+                }
                 <div class="row mb-3">
                 <label class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-7">
@@ -340,7 +349,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                     <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Değiştir</button>
                   }
                   @else if (!this.newRecord) {
-                    <button type="submit" class="btn btn-success">Kaydet</button>
+                    <button type="button" (click)="proformaSave()" class="btn btn-success">Kaydet</button>
                     <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
                   }
                   @else {
@@ -348,7 +357,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                   }
                 </div>
               </div>
-                }
+                
               </form>
           </div>
         </section>
@@ -430,18 +439,15 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
     .css-img-xsmll{
       height: 17px;
     }
-    /*.css-img-smll, .css-img-xsmll {
-      display: none;
+    .css-note-main {
+      display: flex;
     }
-
-    .css-proforma-note:hover .css-img-xsmll {
-      display: inline;
+    .css-note-main > img {
+      margin-left: 5px;
     }
-
-    td:hover .css-img-smll {
-      display: inline;
+    .css-note-main:hover {
+      color: red;
     }
-      */
 
   `
 })
@@ -492,12 +498,15 @@ export class ProformaComponent {
 
   contentNewMachine = false;
   contentNewPart = false;
-  contentNewService = false
+  contentNewService = false;
+
+  notesBeforeEditing: string[] = [];
+  proformaNewNoteText: string = '';
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.detailId = Number(this.route.snapshot.params["id"]);
     if (this.detailId || this.detailId === 0) {
-      this.proformaDetail = this.mService.getProformaDetails(this.detailId);
+      this.proformaDetail = structuredClone(this.mService.getProformaDetails(this.detailId));
     }
     else {
       this.proformaShortList = this.mService.getProformaShortList();
@@ -542,23 +551,38 @@ export class ProformaComponent {
 
   makeChangeActive() {
     this.changeActive = true;
+    if(this.proformaDetail && this.proformaDetail.notes) {
+      this.notesBeforeEditing = structuredClone(this.proformaDetail.notes);
+    }
   }
 
   changeCancel() {
+    this.cancelContentEdit(false);
     this.changeActive = false;
     this.proformaDetail = this.mService.getProformaDetails(this.detailId);
     this.proformaContentEdit = false;
+    this.proformaNewNoteText = '';
+    if (this.proformaDetail) {
+      this.proformaDetail.notes = structuredClone(this.notesBeforeEditing);
+    }
   }
 
   newProforma() {}
 
-  addMachine() {
+  copyProformaDetail() {
     this.proformaDetailCopy = structuredClone(this.proformaDetail);
+  }
+
+  addMachine() {
+    this.copyProformaDetail();
     this.proformaContentEdit = true;
     this.contentNewMachine = true;
   }
   deleteMachine(id: number) {
-    console.log("delete machine from proforma");
+    if (this.proformaDetail) {
+      this.proformaDetail.machines = this.proformaDetail?.machines?.filter(mm => mm.machine.id != id);
+      this.copyProformaDetail();
+    }
   }
   editMachine(id: number) {
     console.log("edit machine from proforma");
@@ -573,6 +597,10 @@ export class ProformaComponent {
   }
   deletePart(id: number) {
     console.log("delete part from proforma");
+    if (this.proformaDetail) {
+      this.proformaDetail.parts = this.proformaDetail.parts?.filter(mp => mp.part.id != id);
+      this.copyProformaDetail();
+    }
   }
   editPart(id: number) {
     console.log("edit part from proforma");
@@ -587,6 +615,10 @@ export class ProformaComponent {
   }
   deleteService(id: number) {
     console.log("delete service from proforma");
+    if (this.proformaDetail) {
+      this.proformaDetail.services = this.proformaDetail.services?.filter(ms => ms.service.id != id);
+      this.copyProformaDetail();
+    }
   }
   editService(id: number) {
     console.log("edit service from proforma");
@@ -603,10 +635,41 @@ export class ProformaComponent {
     this.contentNewPart = false;
     this.contentNewService = false;
     this.proformaContentEdit = false;
+    if (this.proformaDetail) {
+      this.proformaDetail.notes = this.notesBeforeEditing;
+    }
   }
   editContentSave(mProforma: Proforma) {
     this.proformaDetail = mProforma;
+    this.proformaDetailCopy = structuredClone(this.proformaDetail);
+    console.log(this.proformaDetailCopy);
     this.cancelContentEdit(false);
+  }
+  addNote() {
+    if (this.proformaDetail) {
+      if(this.proformaDetail?.notes) {
+        this.proformaDetail.notes.push(this.proformaNewNoteText);
+      }
+      else {
+        this.proformaDetail.notes = [this.proformaNewNoteText];
+      }
+    }
+    this.proformaNewNoteText = '';
+  }
+  deleteNote(note: string) {
+    if (this.proformaDetail && this.proformaDetail.notes && this.proformaDetail.notes.length > 0) {
+      this.proformaDetail.notes = this.proformaDetail.notes.filter(n => n != note);
+    }
+  }
+  proformaSave() {
+    if (this.proformaDetail) {
+      this.proformaDetail.createdDate = new Date();
+      this.proformaDetail.validUntil = this.dateExpirePicker;
+      console.log(this.proformaDetail);
+      if(this.mService.saveProforma(this.proformaDetail, this.proformaDetail.id) === 1) {
+        this.router.navigate(['/proforma']);
+      }
+    }
   }
 
 }

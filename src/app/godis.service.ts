@@ -911,7 +911,7 @@ export class GodisService {
     try {
       let proformaShortList: {id: number, customerName: string, customerId: number, createdDate: Date, totalPrice: number, createdBy: User, detailsOpen: boolean, deactive: boolean}[] = [];
 
-      for (var proforma of this.proformas) {
+      for (var proforma of this.proformas.filter(pf => !pf.revisedById)) {
 
         if (!showDeactives && proforma.deactive) break;
 
@@ -1147,6 +1147,34 @@ export class GodisService {
 
     return "--error--";
 
+  }
+  saveProforma(mProforma: Proforma, revisedProformaId: number | undefined): number {
+    if(!revisedProformaId) {
+      // new proforma
+      return 0;
+    }
+    else {
+      let newId = this.proformas[this.proformas.length - 1].id + 1;
+      let revisingPforoma = this.proformas.find(pf => pf.id === mProforma.id)
+      if (!revisingPforoma) {
+        console.log("Service error. Couldn't found revising proforma");
+        return 0;
+      }
+
+      if (revisingPforoma === mProforma) {
+        console.log("Service error. No change in proforma revision");
+        return 0;
+      }
+
+      let newProforma = mProforma;
+
+      revisingPforoma.revisedById = newId;
+      
+      newProforma.id = newId;
+
+      this.proformas.push(newProforma);
+      return 1;
+    }
   }
 
   constructor() { }
