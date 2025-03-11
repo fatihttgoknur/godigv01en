@@ -280,6 +280,7 @@ export class GodisService {
     {
       id: 0,
       name: "Bonera Çelik",
+      title: "BONERA TUTKU METAL MUTFAK EŞYALARI PLASTİK İÇ VE DIŞ TİCARET SANAYİ LİMİTED ŞİRKETİ",
       address: "OSB, Kahramanmaraş",
     }
   ];
@@ -298,7 +299,7 @@ export class GodisService {
   protected proformas: Proforma[] = [
     {
       id: 0,
-      customer: { id: 0, name: "Bonera Çelik", address: "OSB, Kahramanmaraş"},
+      customer: { id: 0, name: "Bonera Çelik",title: "BONERA TUTKU METAL MUTFAK EŞYALARI PLASTİK İÇ VE DIŞ TİCARET SANAYİ LİMİTED ŞİRKETİ", address: "OSB, Kahramanmaraş"},
       machines: [{
         machine: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
         unitPrice: 43000, 
@@ -312,7 +313,7 @@ export class GodisService {
     },
     {
       id: 1,
-      customer: { id: 0, name: "Bonera Çelik", address: "OSB, Kahramanmaraş"},
+      customer: { id: 0, name: "Bonera Çelik",title: "BONERA TUTKU METAL MUTFAK EŞYALARI PLASTİK İÇ VE DIŞ TİCARET SANAYİ LİMİTED ŞİRKETİ", address: "OSB, Kahramanmaraş"},
       machines: [{
         machine: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
         unitPrice: 23000, 
@@ -348,6 +349,7 @@ export class GodisService {
       createdDate: new Date("2025-01-23T03:24:00Z"),
       validUntil: new Date("2025-01-27T03:24:00Z"),
       notes: [
+        "Tüm fiyatlarımızda para birimi USD ($)'dir.",
         "Fiyatlarımıza T.C.M.B. Döviz kuru geçeridir.",
         "Fiyatlara K.D.V. dahil değildir",
         "Teslim yeri iş yerimizdir",
@@ -800,7 +802,10 @@ export class GodisService {
       return -1;
     }
   }
-
+  getAllCustomers() : Customer[] {
+    if (this.customers && this.customers.length > 0) return this.customers;
+    else return [];
+  }
   getCustomerShortList(): {id: number, name: string}[] {
     let myList = [];
 
@@ -1131,7 +1136,7 @@ export class GodisService {
     }
   }
 
-  formatDate(mDate: Date, format?: number): string {
+  formatDate(mDate?: Date, format?: number): string {
     // format: 0 => 02 Feb
     if (!mDate) return "--error--";
 
@@ -1145,16 +1150,21 @@ export class GodisService {
       return mDate.toLocaleDateString("tr-TR", {day: '2-digit', month: 'short', year: 'numeric'});
     }
 
+    if (format === 2) {
+      return mDate.toLocaleDateString("tr-TR");
+    }
+
     return "--error--";
 
   }
   saveProforma(mProforma: Proforma, revisedProformaId: number | undefined): number {
+    let newId = this.proformas[this.proformas.length - 1].id + 1;
     if(!revisedProformaId) {
-      // new proforma
-      return 0;
+      mProforma.id = newId;
+      this.proformas.push(mProforma);
+      return 1;
     }
     else {
-      let newId = this.proformas[this.proformas.length - 1].id + 1;
       let revisingPforoma = this.proformas.find(pf => pf.id === mProforma.id)
       if (!revisingPforoma) {
         console.log("Service error. Couldn't found revising proforma");
@@ -1173,6 +1183,18 @@ export class GodisService {
       newProforma.id = newId;
 
       this.proformas.push(newProforma);
+      return 1;
+    }
+  }
+  deactivateProforma(pId: number) {
+    let mProforma = this.proformas.find(p=> p.id === pId);
+
+    if (!mProforma) {
+      console.log("service error, proforma couldn't found", pId);
+      return 0;
+    }
+    else {
+      mProforma.deactive = true;
       return 1;
     }
   }

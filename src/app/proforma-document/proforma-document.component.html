@@ -1,0 +1,125 @@
+<div class="css-document-main">
+    <div class="css-document-head">
+        <div class="css-sol-ust">
+            <div class="row">
+                <div class="col">Tarih:</div>
+                <div class="col">{{this.mService.formatDate(proformaDetail?.createdDate, 2)}}</div>
+            </div>
+            <div class="row">
+                <div class="col">Geçerlilik:</div>
+                <div class="col">{{this.mService.formatDate(proformaDetail?.validUntil, 2)}}</div>
+            </div>
+            <div class="row">
+                <div class="col">Referans:</div>
+                <div class="col">GDP-0000{{proformaDetail?.id}}</div>
+            </div>
+        </div>
+        <div class="css-document-logo">
+            <img src="/images/goknur_makine_logo.jpg" alt="">
+        </div>
+        <h5>PROFORMA FATURA</h5>
+    </div>
+    <div class="css-document-content">
+        <table class="mydizgi2">
+            <tr>
+                <td class="trcaption"><div class="bold right">Firma</div></td>
+                <td>{{ this.proformaDetail?.customer?.name }}</td>
+            </tr>
+            <tr>
+                <td class="trcaption"><div class="bold right">İlgili</div></td>
+                <td></td>
+            </tr>
+        </table>
+        <table class="mydizgi">
+            <tr class="tr-all-center">
+                <td class="bold">No</td>
+                <td colspan="2" class="bold">Açıklama</td>
+                <td class="bold">Miktar</td>
+                <td class="bold">Birim Fiyat</td>
+                <td class="bold">Termin</td>
+                <td class="bold">Tutar</td>
+            </tr>
+            @for (mMachine of this.proformaDetail?.machines; track mMachine.machine.id; let idx = $index) {
+                <tr class="tr-all-top">
+                    <td>{{idx + 1}}</td>
+                    <td colspan="2" class="left" >
+                        <div>{{mMachine.machine.name}}</div>
+                        <div class="element-notes">
+                            @for (note of mMachine.notes; track note) {
+                                <div>* {{note}}</div>
+                            }
+                        </div>
+                    </td>
+                    <td class="right">{{mMachine.quantity}}</td>
+                    <td class="right">{{mMachine.unitPrice}}</td>
+                    <td class="right">{{showTermin(mMachine.terminDays)}}</td>
+                    <td class="right">{{mMachine.quantity * mMachine.unitPrice}}</td>
+                </tr>
+            }
+            @for (mPart of this.proformaDetail?.parts; track mPart.part.id; let idx = $index) {
+                <tr class="tr-all-top">
+                    <td>{{ (proformaDetail?.machines?.length ?? 0) + idx + 1 }}</td>
+                    <td colspan="2" class="left" >
+                        <div>{{mPart.part.name}}</div>
+                        <div class="element-notes">
+                            @for (note of mPart.notes; track note) {
+                                <div>* {{note}}</div>
+                            }
+                        </div>
+                    </td>
+                    <td class="right">{{mPart.quantity}}</td>
+                    <td class="right">{{mPart.unitPrice}}</td>
+                    <td class="right">{{showTermin(mPart.terminDays)}}</td>
+                    <td class="right">{{mPart.quantity * mPart.unitPrice}}</td>
+                </tr>
+            }
+            @for (mService of this.proformaDetail?.services; track mService.service.id; let idx = $index) {
+                <tr class="tr-all-top">
+                    <td>{{ (proformaDetail?.machines?.length ?? 0) + (proformaDetail?.parts?.length ?? 0) + idx + 1 }}</td>
+                    <td colspan="2" class="left" >
+                        <div>{{mService.service.name}}</div>
+                        <div class="element-notes">
+                            @for (note of mService.notes; track note) {
+                                <div>* {{note}}</div>
+                            }
+                        </div>
+                    </td>
+                    <td class="right">{{mService.quantity}}</td>
+                    <td class="right">{{mService.unitPrice}}</td>
+                    <td class="right">{{showTermin(mService.terminDays)}}</td>
+                    <td class="right">{{mService.quantity * mService.unitPrice}}</td>
+                </tr>
+            }
+            <tr class="tr-all-top">
+                <td colspan="5" class="no-left-bottom"></td>
+                <td class="right">G. TOPLAM</td>
+                <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true): ''}}</td>
+            </tr>
+            @if(proformaDetail?.percentDiscount) {
+                <tr class="tr-all-top">
+                    <td colspan="5" class="no-left-bottom no-top"></td>
+                    <td class="right">İskonto</td>
+                    <td class="right">{{ proformaDetail?.percentDiscount ?? 0 }} %</td>
+                </tr>
+            }
+            <tr class="tr-all-top">
+                <td colspan="5" class="no-left-bottom no-top"></td>
+                <td class="right bold">TOPLAM</td>
+                <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail): ''}}</td>
+            </tr>
+        </table>
+        <div class="element-notes-pro">
+            @for (note of this.proformaDetail?.notes; track note) {
+                <div>* {{note}}</div>
+            }
+        </div>
+    </div>
+    <div class="css-document-foot">
+        <div class="css-iban">
+            GARANTİ TL IBAN = TR70 0006 2001 1990 0006 2995 33
+        </div>
+        <div class="css-approval">
+            <div>FİRMA ONAYI</div>
+        </div>
+    </div>
+</div>

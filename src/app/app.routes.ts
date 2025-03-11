@@ -6,6 +6,8 @@ import { DbPartsComponent } from './db-parts/db-parts.component';
 import { DbServicesComponent } from './db-services/db-services.component';
 import { DbCustomersComponent } from './db-customers/db-customers.component';
 import { ProformaComponent } from './proforma/proforma.component';
+import { ProformaDocumentComponent } from './proforma-document/proforma-document.component';
+ProformaDocumentComponent
 
 export const routes: Routes = [
     {
@@ -67,6 +69,10 @@ export const routes: Routes = [
         path: 'proforma/:id',
         component: ProformaComponent,
         title: 'Göknur Digital - Teklif'
-    }
-
+    },
+    {
+        path: 'proforma/document/:id',
+        component: ProformaDocumentComponent,
+        title: 'Göknur Digital - Teklif'
+    },
 ];

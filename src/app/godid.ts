@@ -105,5 +105,6 @@ export interface Proforma {
     createdDate: Date,
     validUntil: Date,
     deactive?: boolean,
-    revisedById?: number
+    revisedById?: number,
+    contactPerson?: string
 }

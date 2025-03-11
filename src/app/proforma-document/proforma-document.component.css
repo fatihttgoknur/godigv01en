@@ -1,0 +1,113 @@
+@page {
+    size: auto;
+    margin: 0;
+}
+
+.css-document-main {
+    width: 700px;
+    height: 1000px;
+    /*border: 1px dashed black;*/
+    position: absolute;
+    top:0px;
+    background-color: white;
+    z-index: 300;
+}
+.css-document-main img {
+    width: 370px;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+.css-document-main h5 {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+.bold {
+    font-weight: bold;
+}
+.right {
+    text-align: right;
+}
+table {
+    width: 700px;
+}
+td {
+    line-height: 150%;
+    vertical-align: middle;
+    padding: 5px;
+    border: 1px solid black;
+}
+.tr-all-center td {
+    text-align: center;
+}
+.mydizgi td:first-child {
+    width: 2ch;
+}
+.mydizgi td:nth-child(3) {
+    width: 6ch;
+}
+.mydizgi td:nth-child(4) {
+    width: 10ch;
+}
+.mydizgi td:nth-child(5) {
+    width: 11ch;
+}
+.mydizgi td:nth-child(6) {
+    width: 12ch;
+}
+.trcaption {
+    width: 10ch;
+}
+.css-document-foot {
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    justify-content: right;
+    border-bottom: 1px solid black;
+}
+.css-iban {
+    font-size: smaller;
+    display: flex;
+    width: inherit;
+    align-items: end;
+    margin-left: 10px;
+    font-weight: bold;
+}
+.css-approval {
+    width: 300px;
+    height: 130px;
+    text-align: center;
+    font-weight: bold;
+}
+.left {
+    text-align: left;
+}
+.element-notes, .element-notes-pro {
+    font-size: smaller;
+    font-style: italic;
+}
+.element-notes-pro {
+    margin-top: 30px;
+    margin-left: 10px;
+}
+.tr-all-top td {
+    vertical-align: top;
+}
+.no-left-bottom {
+    border-left: 0;
+    border-bottom: 0 !important;
+}
+.no-top {
+    border-top: 0;
+}
+table {border-collapse: collapse;}
+.css-sol-ust {
+    position: absolute;
+    right: 0px;
+    top:45px;
+    width: 160px;
+    font-size: smaller;
+}
+.css-sol-ust > .row div:nth-child(2) {
+    text-align: right;
+}

@@ -2,18 +2,19 @@ import { Component, inject, numberAttribute } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GodisService } from '../godis.service';
-import { MachineModel, Part, Proforma, Service } from '../godid';
+import { MachineModel, Part, Proforma, Service, Customer } from '../godid';
 import { CustomerComponent } from '../customer/customer.component';
 import { DatepickerComponent } from '../datepicker/datepicker.component';
 import { ProformaContentComponent } from '../proforma-content/proforma-content.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-proforma',
-  imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent, ProformaContentComponent, FormsModule],
+  imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent, ProformaContentComponent, FormsModule, MatIconModule],
   template: `
     <div class="proforma-main">
-      @if (!this.detailId && this.detailId != 0) {
+      @if (!this.detailId && this.detailId != 0 && !isNewProforma) {
         <section class="css-table-manage">
           <div class="tableTopMain">
             <button type="button" class="btn btn-success" [routerLink]="['/proforma/new']">+ Yeni Ekle</button>
@@ -44,7 +45,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                 </tr>
               </thead>
               <tbody>
-                @for (mProforma of this.proformaShortList; track mProforma) {
+                @for (mProforma of this.proformaShortList; track mProforma.id) {
                   <tr class="{{ mProforma.detailsOpen ? 'css-noBottomBorder' : '' }}" [classList]="mProforma.deactive ? 'grayed' : ''">
                     <td (click)="toggleDetails(mProforma.id)">{{ mProforma.id + 1 }}</td>
                     <td>
@@ -64,22 +65,16 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                           <img src="/images/details.png" class="css-intable-img"  title="Detay" />
                           <span>Detay</span>
                         </div>
-                        @if (!mProforma.deactive) {
-                        <div class="css-detailElement" [routerLink]="['/proforma', mProforma.id]">
-                          <img src="/images/revision.png" class="css-intable-img" title="Revize et" />
-                          <span>Revize et</span>
-                        </div>
-                        }
-                        <div class="css-detailElement" [routerLink]="['/proforma', mProforma.id]">
+                        <div class="css-detailElement" (click)="newTab(mProforma.id)">
                           <img src="/images/printer.png" class="css-intable-img" title="Evrak" />
                           <span>Evrak</span>
                         </div>
                         @if (!mProforma.deactive) {
-                        <div class="css-detailElement" [routerLink]="['/proforma', mProforma.id]">
+                        <div class="css-detailElement" (click)="alertPhase2()">
                           <img src="/images/agreement.png" class="css-intable-img" title="Sipariş oluştur" />
                           <span>Sipariş oluştur</span>
                         </div>
-                        <div class="css-detailElement" [routerLink]="['/proforma', mProforma.id]">
+                        <div class="css-detailElement" (click)="deactivateProforma(mProforma.id)">
                           <img src="/images/delete.png" class="css-intable-img"title="Sil" />
                           <span>Sil</span>
                         </div>
@@ -93,16 +88,53 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
           }
         </section>
       }
+      @else if (this.isNewProforma) {
+        <section class="css-section-navi">
+          <a [routerLink]="['/proforma']">
+            Teklifler
+          </a>
+          <span>></span>
+          <span>Yeni Proforma</span>
+        </section>
+        <section>
+          <h2>Yeni proforma</h2>
+          <h5 style="margin-top: 30px; margin-bottom:20px">Adım.1 - Müşteri seçin</h5>
+        </section>
+        <section>
+          <div class="input-group mb-3">
+            <div style="margin-right: 20px;">İsme göre filtrele: </div>
+            <input [(ngModel)]="customerFilterText" type="text" class="form-control" placeholder="müşteri ismi girin" aria-label="müşteri ismi girin" (input)="filterCustomerChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+            <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
+                </div>
+          </div>
+        </section>
+        <section>
+          @for (mCustomer of this.customersFiltered; track mCustomer.id; let idx = $index) {
+            <div class="css-model" (click)="newProformaCustomerPicked(mCustomer)">{{mCustomer.name}}</div>
+          }
+        </section>
+      }
       @else {
         <section class="css-section-navi">
           <a [routerLink]="['/proforma']">
             Teklifler
           </a>
           <span>></span>
-          <span>{{ this.newRecord ? "Yeni kayıt" : 'Proforma #' + proformaDetail?.id }}</span>
+          <span>{{ detailId === -2 ? "Yeni Proforma" : 'Proforma #' + proformaDetail?.id }}</span>
         </section>
         <section>
-          <h2>Proforma #{{ this.proformaDetail?.id }}, {{proformaDetail?.customer?.name}}</h2>
+          @if (detailId && detailId != -1) {
+            @if (detailId === -2) {
+            <h2>Yeni proforma, {{proformaDetail?.customer?.name}}</h2>
+            }
+            @else {
+              <h2>Proforma #{{ this.proformaDetail?.id }}, {{proformaDetail?.customer?.name}}</h2>
+            }
+          }
+          @else {
+            <h2>Yeni proforma</h2>
+          }
           <div class="css-div-form">
               <form>
                 <div class="row mb-3 css-nomar">
@@ -131,6 +163,12 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                   <label class="col-sm-3 col-form-label">Oluşturan:</label>
                   <div class="col-sm-7">
                     {{ (this.proformaDetail) ? this.proformaDetail.createdBy.userName : '' }}
+                  </div>
+                </div>
+                <div class="row mb-3 css-nomar">
+                  <label class="col-sm-3 col-form-label">İlgili Kişi:</label>
+                  <div class="col-sm-7">
+                    <input [(ngModel)]="proformaContactPerson" type="text" name="" id="" [ngModelOptions]="{standalone: true}" [disabled]="this.changeActive ? false : true" placeholder="ilgili kişi ad/soyad">
                   </div>
                 </div>
                 <div class="row mb-3 css-nomar">
@@ -165,7 +203,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                       </tr>
                     </thead>
                     <tbody>
-                      @for (pMachine of proformaDetail?.machines; track pMachine; let idx = $index) {
+                      @for (pMachine of proformaDetail?.machines; track pMachine.machine.id; let idx = $index) {
                         <tr>
                           <td>{{idx + 1}}
                           @if (changeActive || newRecord) {
@@ -211,7 +249,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                         </tr>
                         }
                       }
-                      @for (pPart of proformaDetail?.parts; track pPart; let idx = $index) {
+                      @for (pPart of proformaDetail?.parts; track pPart.part.id; let idx = $index) {
                         <tr>
                           <td>
                             {{ (proformaDetail?.machines?.length ?? 0) + idx + 1 }}
@@ -252,7 +290,7 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                         </tr>
                         }
                       }
-                      @for (pService of proformaDetail?.services; track pService; let idx = $index) {
+                      @for (pService of proformaDetail?.services; track pService.service.id; let idx = $index) {
                         <tr>
                           <td>
                             {{ (proformaDetail?.machines?.length ?? 0) + (proformaDetail?.parts?.length ?? 0) + idx + 1 }}
@@ -320,10 +358,20 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                 @else {
                   <app-proforma-content [fEditingProforma]="this.proformaDetailCopy" [fEditingMachineId]="this.contentEditingMachineId" [fEditingPartId]="this.contentEditingPartId" [fEditingServiceId]="this.contentEditingServiceId" (editContentCanceled)="this.cancelContentEdit($event)" (editContentSave)="this.editContentSave($event)" [fNewMachine]="this.contentNewMachine" [fNewPart]="contentNewPart" [fNewService]="contentNewService" />
                 }
-                @if (proformaDetail && proformaDetail.notes && proformaDetail.notes.length + (N1var ? 1 : 0) > 0) {
-                  <div class="row mb-3">
+                <div class="row mb-3 css-nomar" style="margin-top:10px">
+                  <label class="col-sm-3 col-form-label">İskonto:</label>
+                  <div class="col-sm-7">
+                    @if (proformaDetail && (proformaDetail.percentDiscount || proformaDetail.percentDiscount === 0)) {
+                      <input [disabled]="this.changeActive ? false : true" type="text" (change)="checkDiscount($event)" [(ngModel)]="proformaSetDiscount" [ngModelOptions]="{standalone: true}" name="" id="">
+                    }
+                    <!--<input [(ngModel)]="customerFilterText" type="text" class="form-control" placeholder="müşteri ismi girin" aria-label="müşteri ismi girin" (input)="filterCustomerChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">-->
+                  </div>
+                </div>
+                <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Notlar:</label>
                     <div class="col-sm-9">
+                @if (proformaDetail && proformaDetail.notes && proformaDetail.notes.length + (N1var ? 1 : 0) > 0) {
+                    
                       @if (this.N1var) {
                         <div class="css-proforma-note">**N1: siparişten sonra programlanacaktır.</div>
                       }
@@ -339,9 +387,18 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
                         <div class="css-note-main"><input type="text" class="form-control" id="formNewNote" placeholder="" [(ngModel)]="proformaNewNoteText" [ngModelOptions]="{standalone: true}">
                         <button class="btn btn-info" (click)="addNote()">Ekle</button></div>
                       }
-                    </div>
-                  </div>
+                    
+                  
                 }
+                @else {
+                  <div class="css-proforma-note" style="font-style: italic; font-size: smaller">henüz not yok</div>
+                  @if (changeActive) {
+                        <div class="css-note-main"><input type="text" class="form-control" id="formNewNote" placeholder="" [(ngModel)]="proformaNewNoteText" [ngModelOptions]="{standalone: true}">
+                        <button class="btn btn-info" (click)="addNote()">Ekle</button></div>
+                      }
+                }
+                </div>
+                </div>
                 <div class="row mb-3">
                 <label class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-7">
@@ -365,6 +422,9 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
     </div>
   `,
   styles: `
+    .input-group {
+      align-items:center;
+    }
     .scl1 {
       transform: scale(0.7);
     }
@@ -448,6 +508,16 @@ import { ProformaContentComponent } from '../proforma-content/proforma-content.c
     .css-note-main:hover {
       color: red;
     }
+    .css-model {
+    padding: 10px 20px;
+    margin: 5px 5px;
+    background-color: rgba(179, 174, 174, 0.3);
+    cursor:pointer;
+    border-radius: 18px;
+    }
+    .css-model:hover {
+        background-color: rgba(201, 100, 100, 0.3);
+    }
 
   `
 })
@@ -503,10 +573,32 @@ export class ProformaComponent {
   notesBeforeEditing: string[] = [];
   proformaNewNoteText: string = '';
 
+  isNewProforma: boolean = false;
+
+  customerFilterText: string = '';
+
+  allCustomers: Customer[] | undefined;
+  customersFiltered: Customer[] | undefined;
+
+  proformaContactPerson: string | undefined;
+  proformaSetDiscount: number | undefined
+
   constructor(private route: ActivatedRoute, private router: Router) {
     this.detailId = Number(this.route.snapshot.params["id"]);
+    
     if (this.detailId || this.detailId === 0) {
       this.proformaDetail = structuredClone(this.mService.getProformaDetails(this.detailId));
+      if (this.proformaDetail) {
+        if (this.proformaDetail.percentDiscount) this.proformaSetDiscount = this.proformaDetail.percentDiscount;
+        else this.proformaSetDiscount = 0;
+        this.proformaContactPerson = this.proformaDetail.contactPerson;
+      }
+      if (!this.proformaDetail) this.router.navigate(['/proforma']);
+    }
+    else if (this.route.snapshot.params["id"] === "new") {
+      this.isNewProforma = true;
+      this.allCustomers = this.mService.getAllCustomers();
+      this.customersFiltered = structuredClone(this.allCustomers);
     }
     else {
       this.proformaShortList = this.mService.getProformaShortList();
@@ -557,9 +649,17 @@ export class ProformaComponent {
   }
 
   changeCancel() {
+    if (this.detailId === -2) {
+      this.router.navigate(['/proforma']);
+      return;
+    }
     this.cancelContentEdit(false);
+    this.proformaContactPerson = this.proformaDetail?.contactPerson ?? '';
+    this.proformaSetDiscount = this.proformaDetail?.percentDiscount ?? 0;
     this.changeActive = false;
     this.proformaDetail = this.mService.getProformaDetails(this.detailId);
+    this.proformaContactPerson = this.proformaDetail?.contactPerson ?? '';
+    this.proformaSetDiscount = this.proformaDetail?.percentDiscount ?? 0;
     this.proformaContentEdit = false;
     this.proformaNewNoteText = '';
     if (this.proformaDetail) {
@@ -642,7 +742,6 @@ export class ProformaComponent {
   editContentSave(mProforma: Proforma) {
     this.proformaDetail = mProforma;
     this.proformaDetailCopy = structuredClone(this.proformaDetail);
-    console.log(this.proformaDetailCopy);
     this.cancelContentEdit(false);
   }
   addNote() {
@@ -665,11 +764,81 @@ export class ProformaComponent {
     if (this.proformaDetail) {
       this.proformaDetail.createdDate = new Date();
       this.proformaDetail.validUntil = this.dateExpirePicker;
-      console.log(this.proformaDetail);
-      if(this.mService.saveProforma(this.proformaDetail, this.proformaDetail.id) === 1) {
+      this.proformaDetail.contactPerson = this.proformaContactPerson;
+      this.proformaDetail.percentDiscount = this.proformaSetDiscount;
+
+      console.log(this.proformaContactPerson);
+
+      // ADD N1 NOTE IF NOT EXIST
+      if (this.N1var) {
+        if (!this.proformaDetail.notes || this.proformaDetail.notes.length < 1) {
+          this.proformaDetail.notes = ["*N1: siparişten sonra programlanacaktır."];
+        }
+        else {
+          if (this.proformaDetail.notes?.includes("*N1: siparişten sonra programlanacaktır.")) {
+            this.proformaDetail.notes.push("*N1: siparişten sonra programlanacaktır.");
+          }
+        }
+      }
+
+      if(this.mService.saveProforma(this.proformaDetail, this.proformaDetail.id === -2 ? undefined : this.proformaDetail.id) === 1) {
         this.router.navigate(['/proforma']);
       }
     }
+  }
+  filterCustomerChanging(event: Event) {
+    if (this.customerFilterText && this.customerFilterText.length > 0) {
+      this.customersFiltered = this.allCustomers?.filter(c => c.name.toLocaleLowerCase().includes(this.customerFilterText.toLocaleLowerCase()));
+    }
+    else this.customersFiltered = this.allCustomers;
+  }
+  newProformaCustomerPicked(mCstmr: Customer) {
+
+    this.proformaDetail = {
+      id: -2,
+      customer: mCstmr,
+      deadline: new Date(),
+      validUntil: new Date(),
+      createdBy: {id: 1, userName: "manager", email: "a", password:"b"},
+      createdDate: new Date(),
+      notes: [
+        "Fiyatlarımıza T.C.M.B. Döviz kuru geçeridir.",
+        "Fiyatlara K.D.V. dahil değildir",
+        "Teslim yeri iş yerimizdir",
+        "Onay (Fax/E-mail) alınmadan sipariş kabul edilmeyecektir.",
+        "Yedek parça ve işçilik bedelleri peşin olarak alınacaktır."
+      ]
+    }
+    this.notesBeforeEditing = structuredClone(this.proformaDetail.notes) ?? [];
+    this.detailId = -2;
+    this.isNewProforma = false;
+    this.changeActive = true;
+
+    // may be given from setting itf
+  }
+  deactivateProforma(pId: number) {
+    if (this.mService.deactivateProforma(pId) === 1) {
+      this.proformaShortList = this.mService.getProformaShortList(this.showDeactives);
+    }
+  }
+  alertPhase2() {
+    alert("Faz 2'de yapılacak.")
+  }
+  newTab(id: number) {
+    window.open(`/proforma/document/${id}`, "_blank");
+  }
+  checkDiscount(event: Event) {
+    if (!this.proformaDetail) return;
+
+    if (event.target) {
+      let mTarget = event.currentTarget as HTMLInputElement;
+      if (!mTarget.value) this.proformaSetDiscount = 0
+      if(isNaN(Number(mTarget.value))) {
+        this.proformaSetDiscount = 0;
+      }
+      else this.proformaSetDiscount = Number(mTarget.value);
+    }
+    else this.proformaSetDiscount = 0;
   }
 
 }

@@ -193,7 +193,12 @@ export class ProformaContentComponent {
       this.fEditingMachine.unitPrice = newUnitPrice;
       this.fEditingMachine.terminDays = newTerminDays;
 
-      this.fEditingProforma?.machines?.push(this.fEditingMachine);
+      if (this.fEditingProforma) {
+        if (this.fEditingProforma.machines) {
+          this.fEditingProforma.machines.push(this.fEditingMachine);
+        }
+        else this.fEditingProforma.machines = [this.fEditingMachine];
+      }
       
     }// NEW PART
     else if (this.fNewPart) {
@@ -206,7 +211,12 @@ export class ProformaContentComponent {
       this.fEditingPart.unitPrice = newUnitPrice;
       this.fEditingPart.terminDays = newTerminDays;
 
-      this.fEditingProforma?.parts?.push(this.fEditingPart);
+      if (this.fEditingProforma) {
+        if (this.fEditingProforma.parts) {
+          this.fEditingProforma.parts.push(this.fEditingPart);
+        }
+        else this.fEditingProforma.parts = [this.fEditingPart];
+      }
     }
     else if (this.fNewService) {
       if(!this.fEditingService) {
@@ -218,7 +228,12 @@ export class ProformaContentComponent {
       this.fEditingService.unitPrice = newUnitPrice;
       this.fEditingService.terminDays = newTerminDays;
 
-      this.fEditingProforma?.services?.push(this.fEditingService);
+      if (this.fEditingProforma) {
+        if (this.fEditingProforma.services) {
+          this.fEditingProforma.services.push(this.fEditingService);
+        }
+        else this.fEditingProforma.services = [this.fEditingService];
+      }
     }
 
     this.editContentSave.emit(this.fEditingProforma);
