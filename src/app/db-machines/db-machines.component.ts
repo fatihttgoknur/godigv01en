@@ -12,10 +12,10 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       @if (!this.detailId && this.detailId != 0) {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
-          <span>Makineler</span>
+          <span>Machines</span>
         </section>
         <section class="css-table-manage">
           <div>

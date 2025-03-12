@@ -12,14 +12,14 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       @if (!this.detailId && this.detailId != 0) {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
-          <span>Yedek parçalar</span>
+          <span>Spare Parts</span>
         </section>
         <section class="css-table-manage">
           <div>
-            <button type="button" class="btn btn-success" [routerLink]="['/db-parts/new']">+ Yeni Ekle</button>
+            <button type="button" class="btn btn-success" [routerLink]="['/db-parts/new']">+ Add New</button>
           </div>
         </section>
         <section class="table">

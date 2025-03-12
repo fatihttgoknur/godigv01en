@@ -18,7 +18,7 @@ import { GodisService } from '../godis.service';
         </section>
         <section class="css-table-manage">
           <div>
-            <button type="button" class="btn btn-success" [routerLink]="['/db-services/new']">+ Yeni Ekle</button>
+            <button type="button" class="btn btn-success" [routerLink]="['/db-services/new']">+ Add New</button>
           </div>
         </section>
         <section class="table">
