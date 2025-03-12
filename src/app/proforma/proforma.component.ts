@@ -178,7 +178,7 @@ import { MatIconModule } from '@angular/material/icon';
                   <div class="col-sm-7">
                     @if ((this.newRecord || this.changeActive) && ! this.proformaContentEdit) {
                       <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        + Ekle
+                        + Add
                       </button>
                       <div class="dropdown-menu">
                           <!--<div class="dropdown-divider"></div>-->
