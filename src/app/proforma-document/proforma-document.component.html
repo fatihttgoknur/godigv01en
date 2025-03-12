@@ -93,7 +93,7 @@
             <tr class="tr-all-top">
                 <td colspan="5" class="no-left-bottom"></td>
                 <td class="right">G. TOPLAM</td>
-                <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true): ''}}</td>
+                <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}) : ''}}</td>
             </tr>
             @if(proformaDetail?.percentDiscount) {
                 <tr class="tr-all-top">
@@ -105,7 +105,7 @@
             <tr class="tr-all-top">
                 <td colspan="5" class="no-left-bottom no-top"></td>
                 <td class="right bold">TOPLAM</td>
-                <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail): ''}}</td>
+                <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}) : ''}}</td>
             </tr>
         </table>
         <div class="element-notes-pro">

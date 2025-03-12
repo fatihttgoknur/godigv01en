@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-head',
   imports: [RouterModule],
   template: `
-    <header>
+    <header style="border-bottom: 1px solid black;">
       <section>
         <a [routerLink]="['/']">
           <img src="/images/godig_logo.png" />

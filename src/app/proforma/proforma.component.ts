@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent, ProformaContentComponent, FormsModule, MatIconModule],
   template: `
     <div class="proforma-main">
+      <h3>TEKLİF SİSTEMİ</h3>
       @if (!this.detailId && this.detailId != 0 && !isNewProforma) {
         <section class="css-table-manage">
           <div class="tableTopMain">
@@ -338,7 +339,7 @@ import { MatIconModule } from '@angular/material/icon';
                       </tr>
                       <tr>
                         <td class="css-td-right" colspan="5">Ara Toplam:</td>
-                        <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true): ''}} $</td>
+                        <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}): ''}} $</td>
                         <td></td>
                       </tr>
                       <tr>
@@ -348,7 +349,7 @@ import { MatIconModule } from '@angular/material/icon';
                       </tr>
                       <tr class="css-bold">
                         <td class="css-td-right" colspan="5">Genel Toplam:</td>
-                        <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail): ''}} $</td>
+                        <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}): ''}} $</td>
                         <td></td>
                       </tr>
                     </tfoot>
@@ -402,14 +403,14 @@ import { MatIconModule } from '@angular/material/icon';
                 <div class="row mb-3">
                 <label class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-7">
-                  @if (!changeActive) {
+                  @if (!changeActive && !this.proformaDetail?.deactive) {
                     <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Değiştir</button>
                   }
-                  @else if (!this.newRecord) {
+                  @else if (changeActive && !this.proformaDetail?.deactive) {
                     <button type="button" (click)="proformaSave()" class="btn btn-success">Kaydet</button>
                     <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
                   }
-                  @else {
+                  @else if (!this.proformaDetail?.deactive) {
                     <button type="button" class="btn btn-success" (click)="newProforma()">Kaydet</button>
                   }
                 </div>
@@ -581,7 +582,8 @@ export class ProformaComponent {
   customersFiltered: Customer[] | undefined;
 
   proformaContactPerson: string | undefined;
-  proformaSetDiscount: number | undefined
+  proformaSetDiscount: number | undefined;
+  proformaSetDiscountOrig: number | undefined;
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.detailId = Number(this.route.snapshot.params["id"]);
@@ -646,6 +648,10 @@ export class ProformaComponent {
     if(this.proformaDetail && this.proformaDetail.notes) {
       this.notesBeforeEditing = structuredClone(this.proformaDetail.notes);
     }
+
+    if (this.proformaDetail) {
+      this.proformaSetDiscountOrig = this.proformaDetail.percentDiscount;
+    }
   }
 
   changeCancel() {
@@ -664,6 +670,7 @@ export class ProformaComponent {
     this.proformaNewNoteText = '';
     if (this.proformaDetail) {
       this.proformaDetail.notes = structuredClone(this.notesBeforeEditing);
+      this.proformaDetail.percentDiscount = this.proformaSetDiscountOrig;
     }
   }
 
@@ -801,6 +808,7 @@ export class ProformaComponent {
       validUntil: new Date(),
       createdBy: {id: 1, userName: "manager", email: "a", password:"b"},
       createdDate: new Date(),
+      percentDiscount: 0,
       notes: [
         "Fiyatlarımıza T.C.M.B. Döviz kuru geçeridir.",
         "Fiyatlara K.D.V. dahil değildir",
@@ -809,6 +817,7 @@ export class ProformaComponent {
         "Yedek parça ve işçilik bedelleri peşin olarak alınacaktır."
       ]
     }
+    this.proformaSetDiscount = 0;
     this.notesBeforeEditing = structuredClone(this.proformaDetail.notes) ?? [];
     this.detailId = -2;
     this.isNewProforma = false;
@@ -839,6 +848,8 @@ export class ProformaComponent {
       else this.proformaSetDiscount = Number(mTarget.value);
     }
     else this.proformaSetDiscount = 0;
+
+    this.proformaDetail.percentDiscount = this.proformaSetDiscount;
   }
 
 }

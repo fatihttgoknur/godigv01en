@@ -25,13 +25,13 @@ import { GodisService } from '../godis.service';
       visibility: hidden;
     }
     .customerAppMain:hover .css-detailIcon{
-      visibility: visible;
+      /*visibility: visible;*/
       display: inline-block;
       float: right;
       width: max-content;
     }
     .css-detailIcon:hover .css-details {
-      display: flex;
+      /*display: flex;*/
       flex-direction: column;
     }
     div:has(.css-detailIcon:hover) {

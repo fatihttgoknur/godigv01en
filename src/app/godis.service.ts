@@ -918,20 +918,20 @@ export class GodisService {
 
       for (var proforma of this.proformas.filter(pf => !pf.revisedById)) {
 
-        if (!showDeactives && proforma.deactive) break;
-
-        proformaShortList.push(
-          {
-            id: proforma.id,
-            customerName: proforma.customer.name,
-            customerId: proforma.customer.id,
-            createdDate: proforma.createdDate,
-            totalPrice: this.giveTotalPrice(proforma),
-            createdBy: proforma.createdBy,
-            detailsOpen: false,
-            deactive: proforma.deactive ?? false
-          }
-        )
+        if ((proforma.deactive && showDeactives) || !proforma.deactive) {
+          proformaShortList.push(
+            {
+              id: proforma.id,
+              customerName: proforma.customer.name,
+              customerId: proforma.customer.id,
+              createdDate: proforma.createdDate,
+              totalPrice: this.giveTotalPrice(proforma),
+              createdBy: proforma.createdBy,
+              detailsOpen: false,
+              deactive: proforma.deactive ?? false
+            }
+          )
+        }
       }
 
       return proformaShortList;
