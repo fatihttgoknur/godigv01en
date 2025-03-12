@@ -22,5 +22,5 @@ import { HeadComponent } from '../head/head.component';
   `
 })
 export class MainComponent {
-  title = 'Göknur Digital - Home'
+  title = 'Company Digital - Home'
 }

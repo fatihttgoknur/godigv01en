@@ -2,42 +2,42 @@
     <div class="css-document-head">
         <div class="css-sol-ust">
             <div class="row">
-                <div class="col">Tarih:</div>
+                <div class="col">Date:</div>
                 <div class="col">{{this.mService.formatDate(proformaDetail?.createdDate, 2)}}</div>
             </div>
             <div class="row">
-                <div class="col">Geçerlilik:</div>
+                <div class="col">Valid Until:</div>
                 <div class="col">{{this.mService.formatDate(proformaDetail?.validUntil, 2)}}</div>
             </div>
             <div class="row">
-                <div class="col">Referans:</div>
+                <div class="col">Reference:</div>
                 <div class="col">GDP-0000{{proformaDetail?.id}}</div>
             </div>
         </div>
         <div class="css-document-logo">
             <img src="/images/goknur_makine_logo.jpg" alt="">
         </div>
-        <h5>PROFORMA FATURA</h5>
+        <h5>PROFORMA</h5>
     </div>
     <div class="css-document-content">
         <table class="mydizgi2">
             <tr>
-                <td class="trcaption"><div class="bold right">Firma</div></td>
+                <td class="trcaption"><div class="bold right">Company</div></td>
                 <td>{{ this.proformaDetail?.customer?.name }}</td>
             </tr>
             <tr>
-                <td class="trcaption"><div class="bold right">İlgili</div></td>
+                <td class="trcaption"><div class="bold right">Contact Person</div></td>
                 <td></td>
             </tr>
         </table>
         <table class="mydizgi">
             <tr class="tr-all-center">
                 <td class="bold">No</td>
-                <td colspan="2" class="bold">Açıklama</td>
-                <td class="bold">Miktar</td>
-                <td class="bold">Birim Fiyat</td>
+                <td colspan="2" class="bold">Explanation</td>
+                <td class="bold">Qty</td>
+                <td class="bold">Unit Price</td>
                 <td class="bold">Termin</td>
-                <td class="bold">Tutar</td>
+                <td class="bold">Amount</td>
             </tr>
             @for (mMachine of this.proformaDetail?.machines; track mMachine.machine.id; let idx = $index) {
                 <tr class="tr-all-top">
@@ -92,19 +92,19 @@
             }
             <tr class="tr-all-top">
                 <td colspan="5" class="no-left-bottom"></td>
-                <td class="right">G. TOPLAM</td>
+                <td class="right">SUB TOTAL</td>
                 <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}) : ''}}</td>
             </tr>
             @if(proformaDetail?.percentDiscount) {
                 <tr class="tr-all-top">
                     <td colspan="5" class="no-left-bottom no-top"></td>
-                    <td class="right">İskonto</td>
+                    <td class="right">Discount</td>
                     <td class="right">{{ proformaDetail?.percentDiscount ?? 0 }} %</td>
                 </tr>
             }
             <tr class="tr-all-top">
                 <td colspan="5" class="no-left-bottom no-top"></td>
-                <td class="right bold">TOPLAM</td>
+                <td class="right bold">TOTAL</td>
                 <td class="right">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}) : ''}}</td>
             </tr>
         </table>
@@ -116,10 +116,10 @@
     </div>
     <div class="css-document-foot">
         <div class="css-iban">
-            GARANTİ TL IBAN = TR70 0006 2001 1990 0006 2995 33
+            BANK USD IBAN = TR70 0056 2051 1990 0005 2395 32
         </div>
         <div class="css-approval">
-            <div>FİRMA ONAYI</div>
+            <div>APPROVAL</div>
         </div>
     </div>
 </div>

@@ -2,22 +2,22 @@
     <h3>
         İçerik düzenleme - 
         @if (this.fEditingMachineId || this.fEditingMachineId === 0) {
-            Makine Düzenle
+            Edit Machine
         }
         @else if (this.fEditingPartId) {
-            Parça Düzenle
+            Edit Part
         }
         @else if (this.fEditingServiceId) {
-            Servis Düzenle
+            Edit Service
         }
         @else if (this.fNewMachine) {
-            Makine Ekle
+            Add Machine
         }
         @else if (this.fNewPart) {
-            Parça Ekle
+            Add Part
         }
         @else if (this.fNewService) {
-            Servis Ekle
+            Add Service
         }
     </h3>
     <form [formGroup]="fgEditingMachine">
@@ -27,13 +27,13 @@
                 <div class="col-md-3">
                     @switch (fEditingContent) {
                         @case (fEditingMachine) {
-                            Makine Modeli:
+                            Machine Model:
                         }
                         @case (fEditingPart) {
-                            Parça ismi:
+                            Part Name:
                         }
                         @case (fEditingService) {
-                            Servis:
+                            Service:
                         }
                     }
                 </div>
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">Liste Fiyatı:</div>
+                <div class="col-md-3">List Price:</div>
                 <div class="col-md-4">
                     @if (fEditingContent.listPriceBefore != fEditingContent.listPriceNow) {
                         {{fEditingContent.listPriceBefore}} |
@@ -61,13 +61,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">Birim Fiyat:</div>
+                <div class="col-md-3">Unit Price:</div>
                 <div class="col-md-4">
                     <input type="text" class="form-control" id="formUnitPrice" placeholder="" formControlName="fcEditingMachinePrice">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">Adet:</div>
+                <div class="col-md-3">Qty:</div>
                 <div class="col-md-4">
                     <input type="text" class="form-control" id="formQuantity" placeholder="" formControlName="fcEditingMachineQty">
                 </div>
@@ -77,41 +77,41 @@
                 <div class="col-md-6">
                     <div class="col-topla">
                         <input type="text" style="width: 188px;" class="form-control" id="formTermin" placeholder="" formControlName="fcEditingMachineTermin">
-                        <div> gün</div>
+                        <div> days</div>
                     </div>
-                    <div class="col-note"> 0: stok; -1: siparişten sonra programlanacak; [boş]: -</div>
+                    <div class="col-note"> 0: stock; -1: will be programmed after purchase; [blank]: -</div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">Notlar:</div>
+                <div class="col-md-3">Notes:</div>
                 <div class="col-md-7 col-notlar">
                     @if (!fEditingContent.notes || (fEditingContent.notes.length < 1)) {
-                        <span style="font-style: italic; font-size: smaller;">henüz not yok</span>
+                        <span style="font-style: italic; font-size: smaller;">no note yet</span>
                     }
                     @for (note of fEditingContent.notes; track note) {
-                        <div class="css-col-note col-topla"><div>* {{note}}</div><img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteNote(note)" /></div>
+                        <div class="css-col-note col-topla"><div>* {{note}}</div><img src="/images/delete.png" class="css-intable-img css-img-smll" title="Delete" (click)="deleteNote(note)" /></div>
                     }
                     <div class="css-col-note col-topla">
                         <input type="text" class="form-control" id="formNewNote" placeholder="" formControlName="fcEditingMachineNewNote">
-                        <button class="btn btn-info" (click)="addNote()">Ekle</button>
+                        <button class="btn btn-info" (click)="addNote()">Add</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="css-div-buttons">
             @if (!this.fNewMachine && !this.fNewPart && !this.fNewService) {
-                <button type="submit" class="btn btn-success" (click)="contentEditSave()">Kaydet</button>
+                <button type="submit" class="btn btn-success" (click)="contentEditSave()">Save</button>
             }
             @else {
-                <button type="submit" class="btn btn-success" (click)="contentNewSave()">Kaydet</button>
+                <button type="submit" class="btn btn-success" (click)="contentNewSave()">Save</button>
             }
-            <button type="button" class="btn btn-danger" (click)="contentEditCancel()">İptal</button>
+            <button type="button" class="btn btn-danger" (click)="contentEditCancel()">Cancel</button>
         </div>
     }
     @else if (fNewMachine) {
         <div>
             <div class="input-group mb-3">
-                <input [(ngModel)]="machineFilterText" type="text" class="form-control" placeholder="makine ismi veya kodu girin" aria-label="Username" (input)="filterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+                <input [(ngModel)]="machineFilterText" type="text" class="form-control" placeholder="machine name or code" aria-label="Username" (input)="filterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
                 </div>
@@ -130,7 +130,7 @@
     }
     @else if (fNewPart) {
         <div class="css-filter-row row">
-            <div class="col-3">Makineye göre filtrele:</div>
+            <div class="col-3">Filter by Machine:</div>
             <div class="css-input-width1 col">
                 @if (this.partMachineFiltering) {
                     <div class="css-par-machine-filter-div">
@@ -140,9 +140,9 @@
                     </div>
                 }
                 <div class="input-group mbf-3">
-                    <input [(ngModel)]="partMachineFilterText" (focus)="partMachineFilterFocused()" (blur)="partMachineFilterBlur()" id="partMachineFilterInput" type="text" class="form-control" placeholder="makine ismi veya kodu girin" aria-label="Username" (input)="partFilterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+                    <input [(ngModel)]="partMachineFilterText" (focus)="partMachineFilterFocused()" (blur)="partMachineFilterBlur()" id="partMachineFilterInput" type="text" class="form-control" placeholder="machine name or code" aria-label="Username" (input)="partFilterInputChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
+                        <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="search" fontIcon="search"></mat-icon></span>
                     </div>
                 </div>
             </div>
@@ -165,7 +165,7 @@
             </div>
         </div>
         <div class="css-filter-row row">
-            <div class="col-3">İsim ara:</div>
+            <div class="col-3">Search name:</div>
             <div class="css-input-group-part-name col">
                 <div class="input-group mbf-3">
                     <input [(ngModel)]="partNameFilterText" id="partFilterInput" type="text" class="form-control" placeholder="parça ismi girin" aria-label="part name" (input)="partFilterNameChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">

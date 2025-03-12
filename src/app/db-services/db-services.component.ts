@@ -11,10 +11,10 @@ import { GodisService } from '../godis.service';
       @if (!this.detailId && this.detailId != 0) {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
-          <span>Hizmetler</span>
+          <span>Services</span>
         </section>
         <section class="css-table-manage">
           <div>
@@ -26,10 +26,10 @@ import { GodisService } from '../godis.service';
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">İsim</th>
-                <th scope="col">Liste Fiyatı</th>
-                <th scope="col">Değiştir</th>
-                <th scope="col">Aktif</th>
+                <th scope="col">Name</th>
+                <th scope="col">List Price</th>
+                <th scope="col">Change</th>
+                <th scope="col">Active</th>
               </tr>
             </thead>
             <tbody>
@@ -63,27 +63,27 @@ import { GodisService } from '../godis.service';
       @else {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
           <a [routerLink]="['/db-services']">
-            Hizmetler
+            Services
           </a>
           <span>></span>
-          <span>{{ this.newRecord ? "Yeni kayıt" : this.editintService?.name }}</span>
+          <span>{{ this.newRecord ? "New Record" : this.editintService?.name }}</span>
         </section>
         <section>
           <h2>{{ this.editintService?.name }}</h2>
           <div class="css-div-form">
             <form [formGroup]="fgService" (submit)="saveEditing()">
               <div class="row mb-3">
-                <label for="formName" class="col-sm-3 col-form-label">İsim:</label>
+                <label for="formName" class="col-sm-3 col-form-label">Name:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formName" placeholder="" value="{{this.editintService?.name}}" formControlName="name" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formPrice" class="col-sm-3 col-form-label">Fiyat:</label>
+                <label for="formPrice" class="col-sm-3 col-form-label">Price:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formPrice" placeholder="" value="{{this.editintService?.price}}" formControlName="price" [readOnly]="!changeActive">
                 </div>
@@ -95,11 +95,11 @@ import { GodisService } from '../godis.service';
                     
                   }
                   @else if (!this.newRecord) {
-                    <button type="submit" class="btn btn-success">Kaydet</button>
-                    <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger" (click)="changeCancel()">Cancel</button>
                   }
                   @else {
-                    <button type="button" class="btn btn-success" (click)="newService()">Kaydet</button>
+                    <button type="button" class="btn btn-success" (click)="newService()">Save</button>
                   }
                 </div>
               </div>

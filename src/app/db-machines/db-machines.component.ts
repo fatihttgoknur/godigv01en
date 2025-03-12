@@ -19,7 +19,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
         </section>
         <section class="css-table-manage">
           <div>
-            <button type="button" class="btn btn-success" [routerLink]="['/db-machines/new']">+ Yeni Ekle</button>
+            <button type="button" class="btn btn-success" [routerLink]="['/db-machines/new']">+ Add New</button>
           </div>
         </section>
         <section class="table">
@@ -27,11 +27,11 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Kod</th>
-              <th scope="col">İsim</th>
-              <th scope="col">Liste Fiyatı</th>
-              <th scope="col">Detay</th>
-              <th scope="col">Aktif</th>
+              <th scope="col">Code</th>
+              <th scope="col">Name</th>
+              <th scope="col">List Price</th>
+              <th scope="col">Detail</th>
+              <th scope="col">Active</th>
             </tr>
           </thead>
           <tbody>
@@ -66,11 +66,11 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       @else {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
           <a [routerLink]="['/db-machines']">
-            Makineler
+            Machines
           </a>
           <span>></span>
           <span>{{ this.newRecord ? "Yeni kayıt" : this.qMachineDetail?.name }}</span>
@@ -80,49 +80,49 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
           <div class="css-div-form">
             <form [formGroup]="fgEditMachineModel" (submit)="editMachineModel()">
               <div class="row mb-3">
-                <label for="formCode" class="col-sm-3 col-form-label">Kod:</label>
+                <label for="formCode" class="col-sm-3 col-form-label">Code:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formCode" placeholder="" value="{{this.qMachineDetail?.code}}" formControlName="code" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formName" class="col-sm-3 col-form-label">İsim:</label>
+                <label for="formName" class="col-sm-3 col-form-label">Name:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formName" placeholder="" value="{{this.qMachineDetail?.name}}" formControlName="name" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formPower" class="col-sm-3 col-form-label">Elektrik Gücü (kW):</label>
+                <label for="formPower" class="col-sm-3 col-form-label">Power (kW):</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formPower" placeholder="" value="{{this.qMachineDetail?.power}}" formControlName="power" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formCapacity" class="col-sm-3 col-form-label">Kapasite:</label>
+                <label for="formCapacity" class="col-sm-3 col-form-label">Capacity:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formCapacity" placeholder="" value="{{this.qMachineDetail?.capacity}}" formControlName="capacity" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formExplanation" class="col-sm-3 col-form-label">Açıklama:</label>
+                <label for="formExplanation" class="col-sm-3 col-form-label">Explanation:</label>
                 <div class="col-sm-7">
                   <textarea style="resize: none; height:100px" name="formExplanation" id="formExplanation" class="form-control" value="{{this.qMachineDetail?.explanation}}" formControlName="explanation" [readOnly]="!changeActive"></textarea>
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formPrice" class="col-sm-3 col-form-label">Fiyat:</label>
+                <label for="formPrice" class="col-sm-3 col-form-label">Price:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formPrice" placeholder="" value="{{this.qMachineDetail?.price}}" formControlName="price" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formImageUrl" class="col-sm-3 col-form-label">Fotoğraf:</label>
+                <label for="formImageUrl" class="col-sm-3 col-form-label">Image:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formImageUrl" placeholder="" value="{{this.qMachineDetail?.pictureUrl}}" formControlName="imageUrl" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formProductionTime" class="col-sm-3 col-form-label">Üretim Zamanı (gün):</label>
+                <label for="formProductionTime" class="col-sm-3 col-form-label">Production Time (days):</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formProductionTime" placeholder="" value="{{this.qMachineDetail?.productionTime}}" formControlName="productionTime" [readOnly]="!changeActive">
                 </div>
@@ -131,14 +131,14 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
                 <label class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-7">
                   @if (!changeActive) {
-                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Değiştir</button>
+                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Change</button>
                   }
                   @else if (!this.newRecord) {
-                    <button type="submit" class="btn btn-success">Kaydet</button>
-                    <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger" (click)="changeCancel()">Cancel</button>
                   }
                   @else {
-                    <button type="button" class="btn btn-success" (click)="newMachineModel()">Kaydet</button>
+                    <button type="button" class="btn btn-success" (click)="newMachineModel()">Save</button>
                   }
                 </div>
               </div>

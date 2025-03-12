@@ -8,11 +8,11 @@ import { RouterModule } from '@angular/router';
     <div class="divHomeMain">
       <section class="link-type1-section" [routerLink]="['/proforma']">
         <img src="/images/bill.png" />
-        <span>Teklifler</span>
+        <span>Proformas</span>
       </section>
       <section class="link-type1-section" [routerLink]="['/database']">
         <img src="/images/database-file.png" />
-        <span>Veritabanı</span>
+        <span>Database</span>
       </section>
     </div>
   `,

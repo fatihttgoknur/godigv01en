@@ -13,66 +13,66 @@ export const routes: Routes = [
     {
         path: '',
         component: HomeComponent,
-        title: 'Göknur Digital - Home'
+        title: 'Company Digital - Home'
     },
     {
         path: 'database',
         component: DatabaseComponent,
-        title: 'Göknur Digital - Veritabanı'
+        title: 'Company Digital - Database'
     },
     {
         path: 'db-machines',
         component: DbMachinesComponent,
-        title: 'Göknur Digital - Makineler'
+        title: 'Company Digital - Machines'
     },
     {
         path: 'db-machines/:id',
         component: DbMachinesComponent,
-        title: 'Göknur Digital - Makine'
+        title: 'Company Digital - Machine'
     },
     {
         path: 'db-parts',
         component: DbPartsComponent,
-        title: 'Göknur Digital - Yedek parçalar'
+        title: 'Company Digital - Spare Parts'
     },
     {
         path: 'db-parts/:id',
         component: DbPartsComponent,
-        title: 'Göknur Digital - Yedek Parça'
+        title: 'Company Digital - Spare Part'
     },
     {
         path: 'db-services',
         component: DbServicesComponent,
-        title: 'Göknur Digital - Hizmetler'
+        title: 'Company Digital - Services'
     },
     {
         path: 'db-services/:id',
         component: DbServicesComponent,
-        title: 'Göknur Digital - Hizmet'
+        title: 'Company Digital - Service'
     },
     {
         path: 'db-customers',
         component: DbCustomersComponent,
-        title: 'Göknur Digital - Müşteriler'
+        title: 'Company Digital - Customers'
     },
     {
         path: 'db-customers/:id',
         component: DbCustomersComponent,
-        title: 'Göknur Digital - Müşteri'
+        title: 'Company Digital - Customer'
     },
     {
         path: 'proforma',
         component: ProformaComponent,
-        title: 'Göknur Digital - Teklifler'
+        title: 'Company Digital - Proformas'
     },
     {
         path: 'proforma/:id',
         component: ProformaComponent,
-        title: 'Göknur Digital - Teklif'
+        title: 'Company Digital - Proforma'
     },
     {
         path: 'proforma/document/:id',
         component: ProformaDocumentComponent,
-        title: 'Göknur Digital - Teklif'
+        title: 'Company Digital - Proforma'
     },
 ];

@@ -14,34 +14,34 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [RouterModule, ReactiveFormsModule, CustomerComponent, DatepickerComponent, ProformaContentComponent, FormsModule, MatIconModule],
   template: `
     <div class="proforma-main">
-      <h3>TEKLİF SİSTEMİ</h3>
+      <h3>PROFORMA SYSTEM</h3>
       @if (!this.detailId && this.detailId != 0 && !isNewProforma) {
         <section class="css-table-manage">
           <div class="tableTopMain">
-            <button type="button" class="btn btn-success" [routerLink]="['/proforma/new']">+ Yeni Ekle</button>
+            <button type="button" class="btn btn-success" [routerLink]="['/proforma/new']">+ Add New</button>
             <div class="form-check">
               <form [formGroup]="fgShowDeleted">
               <input class="form-check-input" formControlName="fcShowDeleted"  type="checkbox" (change)="toggleShowDeleted()" value="" id="flexCheckDefault">
               </form>
               <label class="form-check-label" for="flexCheckDefault">
-                Silinenleri göster
+                Show deleted
               </label>
             </div>
           </div>
         </section>
         <section class="table">
           @if (!this.proformaShortList || this.proformaShortList.length < 1) {
-              <div>Henüz proforma yok.</div>
+              <div>No proforma yet.</div>
           }
           @else {
             <table class="table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Firma</th>
-                  <th scope="col">Tarih</th>
-                  <th scope="col">Fiyat ($)</th>
-                  <th scope="col">Oluşturan</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Price ($)</th>
+                  <th scope="col">Created By</th>
                   <th scope="col"></th>
                 </tr>
               </thead>
@@ -64,20 +64,20 @@ import { MatIconModule } from '@angular/material/icon';
                       <div>
                         <div class="css-detailElement" [routerLink]="['/proforma', mProforma.id]">
                           <img src="/images/details.png" class="css-intable-img"  title="Detay" />
-                          <span>Detay</span>
+                          <span>Detail</span>
                         </div>
                         <div class="css-detailElement" (click)="newTab(mProforma.id)">
                           <img src="/images/printer.png" class="css-intable-img" title="Evrak" />
-                          <span>Evrak</span>
+                          <span>Document</span>
                         </div>
                         @if (!mProforma.deactive) {
                         <div class="css-detailElement" (click)="alertPhase2()">
                           <img src="/images/agreement.png" class="css-intable-img" title="Sipariş oluştur" />
-                          <span>Sipariş oluştur</span>
+                          <span>Create Purchase</span>
                         </div>
                         <div class="css-detailElement" (click)="deactivateProforma(mProforma.id)">
                           <img src="/images/delete.png" class="css-intable-img"title="Sil" />
-                          <span>Sil</span>
+                          <span>Delete</span>
                         </div>
                         }
                       </div>
@@ -92,21 +92,21 @@ import { MatIconModule } from '@angular/material/icon';
       @else if (this.isNewProforma) {
         <section class="css-section-navi">
           <a [routerLink]="['/proforma']">
-            Teklifler
+            Proformas
           </a>
           <span>></span>
-          <span>Yeni Proforma</span>
+          <span>New Proforma</span>
         </section>
         <section>
-          <h2>Yeni proforma</h2>
-          <h5 style="margin-top: 30px; margin-bottom:20px">Adım.1 - Müşteri seçin</h5>
+          <h2>New Proforma</h2>
+          <h5 style="margin-top: 30px; margin-bottom:20px">Step.1 - Choose company</h5>
         </section>
         <section>
           <div class="input-group mb-3">
-            <div style="margin-right: 20px;">İsme göre filtrele: </div>
-            <input [(ngModel)]="customerFilterText" type="text" class="form-control" placeholder="müşteri ismi girin" aria-label="müşteri ismi girin" (input)="filterCustomerChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
+            <div style="margin-right: 20px;">Filter by Name: </div>
+            <input [(ngModel)]="customerFilterText" type="text" class="form-control" placeholder="enter company name" aria-label="enter company name" (input)="filterCustomerChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">
             <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Ara" fontIcon="search"></mat-icon></span>
+                    <span class="input-group-text" id="basic-addon1"><mat-icon aria-hidden="false" aria-label="Search" fontIcon="search"></mat-icon></span>
                 </div>
           </div>
         </section>
@@ -119,7 +119,7 @@ import { MatIconModule } from '@angular/material/icon';
       @else {
         <section class="css-section-navi">
           <a [routerLink]="['/proforma']">
-            Teklifler
+            Proformas
           </a>
           <span>></span>
           <span>{{ detailId === -2 ? "Yeni Proforma" : 'Proforma #' + proformaDetail?.id }}</span>
@@ -127,19 +127,19 @@ import { MatIconModule } from '@angular/material/icon';
         <section>
           @if (detailId && detailId != -1) {
             @if (detailId === -2) {
-            <h2>Yeni proforma, {{proformaDetail?.customer?.name}}</h2>
+            <h2>New proforma, {{proformaDetail?.customer?.name}}</h2>
             }
             @else {
               <h2>Proforma #{{ this.proformaDetail?.id }}, {{proformaDetail?.customer?.name}}</h2>
             }
           }
           @else {
-            <h2>Yeni proforma</h2>
+            <h2>New proforma</h2>
           }
           <div class="css-div-form">
               <form>
                 <div class="row mb-3 css-nomar">
-                  <label class="col-sm-3 col-form-label">Tarih:</label>
+                  <label class="col-sm-3 col-form-label">Date:</label>
                   <div class="col-sm-7">
                     @if (!changeActive && !newRecord) {
                       {{ (this.proformaDetail && this.proformaDetail.createdDate) ? mService.formatDate(this.proformaDetail.createdDate, 1) : '' }}
@@ -150,7 +150,7 @@ import { MatIconModule } from '@angular/material/icon';
                   </div>
                 </div>
                 <div class="row mb-3 css-nomar">
-                  <label class="col-sm-3 col-form-label">Son Geçerlilik:</label>
+                  <label class="col-sm-3 col-form-label">Valid Until:</label>
                   <div class="col-sm-7">
                     @if (!changeActive && !newRecord) {
                       {{ (this.proformaDetail && this.proformaDetail.validUntil) ? mService.formatDate(this.proformaDetail.validUntil, 1) : '' }}
@@ -161,19 +161,19 @@ import { MatIconModule } from '@angular/material/icon';
                   </div>
                 </div>
                 <div class="row mb-3 css-nomar">
-                  <label class="col-sm-3 col-form-label">Oluşturan:</label>
+                  <label class="col-sm-3 col-form-label">Created By:</label>
                   <div class="col-sm-7">
                     {{ (this.proformaDetail) ? this.proformaDetail.createdBy.userName : '' }}
                   </div>
                 </div>
                 <div class="row mb-3 css-nomar">
-                  <label class="col-sm-3 col-form-label">İlgili Kişi:</label>
+                  <label class="col-sm-3 col-form-label">Contact Person:</label>
                   <div class="col-sm-7">
-                    <input [(ngModel)]="proformaContactPerson" type="text" name="" id="" [ngModelOptions]="{standalone: true}" [disabled]="this.changeActive ? false : true" placeholder="ilgili kişi ad/soyad">
+                    <input [(ngModel)]="proformaContactPerson" type="text" name="" id="" [ngModelOptions]="{standalone: true}" [disabled]="this.changeActive ? false : true" placeholder="contact person">
                   </div>
                 </div>
                 <div class="row mb-3 css-nomar">
-                  <label class="col-sm-3 col-form-label">İçerik:</label>
+                  <label class="col-sm-3 col-form-label">Contents:</label>
 
                   <div class="col-sm-7">
                     @if ((this.newRecord || this.changeActive) && ! this.proformaContentEdit) {
@@ -182,9 +182,9 @@ import { MatIconModule } from '@angular/material/icon';
                       </button>
                       <div class="dropdown-menu">
                           <!--<div class="dropdown-divider"></div>-->
-                          <a class="dropdown-item" style="cursor: pointer;" (click)="addMachine()">Makine</a>
-                          <a class="dropdown-item" style="cursor: pointer;" (click)="addPart()">Parça</a>
-                          <a class="dropdown-item" style="cursor: pointer;" (click)="addService()">Servis</a>
+                          <a class="dropdown-item" style="cursor: pointer;" (click)="addMachine()">Machine</a>
+                          <a class="dropdown-item" style="cursor: pointer;" (click)="addPart()">Spare Part</a>
+                          <a class="dropdown-item" style="cursor: pointer;" (click)="addService()">Service</a>
                       </div>
                     }
                   </div>
@@ -195,12 +195,12 @@ import { MatIconModule } from '@angular/material/icon';
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Ürün / Servis</th>
-                        <th scope="col">Liste Fiyatı</th>
-                        <th scope="col">Birim Fiyat</th>
-                        <th scope="col">Adet</th>
-                        <th scope="col">Toplam</th>
-                        <th scope="col">Termin</th>
+                        <th scope="col">Product / Service</th>
+                        <th scope="col">List Price</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Deadline</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -208,8 +208,8 @@ import { MatIconModule } from '@angular/material/icon';
                         <tr>
                           <td>{{idx + 1}}
                           @if (changeActive || newRecord) {
-                              <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Düzenle" (click)="editMachine(pMachine.machine.id)" />
-                              <img src="/images/delete.png" class="css-intable-img css-img-smll" title="Sil" (click)="deleteMachine(pMachine.machine.id)" />
+                              <img src="/images/edit-info.png" class="css-intable-img css-img-smll"title="Edit" (click)="editMachine(pMachine.machine.id)" />
+                              <img src="/images/delete.png" class="css-intable-img css-img-smll" title="Delete" (click)="deleteMachine(pMachine.machine.id)" />
                             }
                           </td>
                           <td>
@@ -218,11 +218,11 @@ import { MatIconModule } from '@angular/material/icon';
                           </td>
                           <td class="alignRight">
                             @if (pMachine.listPriceBefore != pMachine.listPriceNow) {
-                              <span title="eski">
+                              <span title="old">
                                 {{pMachine.listPriceBefore}}
                               </span>
                                 | 
-                              <span title="güncel">
+                              <span title="actual">
                                 {{pMachine.listPriceNow}}
                               </span>
                             }
@@ -305,8 +305,8 @@ import { MatIconModule } from '@angular/material/icon';
                           </td>
                           @if (pService.listPriceBefore != pService.listPriceNow) {
                             <td class="alignRight">
-                            <span title="eski">{{ pService.listPriceBefore }}</span> | 
-                            <span title="güncel">{{ pService.listPriceNow }}</span>
+                            <span title="old">{{ pService.listPriceBefore }}</span> | 
+                            <span title="actual">{{ pService.listPriceNow }}</span>
                             </td>
                           }
                           @else {
@@ -338,17 +338,17 @@ import { MatIconModule } from '@angular/material/icon';
                         <td colspan="7"></td>
                       </tr>
                       <tr>
-                        <td class="css-td-right" colspan="5">Ara Toplam:</td>
+                        <td class="css-td-right" colspan="5">Sub Total:</td>
                         <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail, true).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}): ''}} $</td>
                         <td></td>
                       </tr>
                       <tr>
-                        <td class="css-td-right" colspan="5">İskonto:</td>
+                        <td class="css-td-right" colspan="5">Discount:</td>
                         <td class="alignRight">{{ proformaDetail?.percentDiscount ?? 0 }} %</td>
                         <td></td>
                       </tr>
                       <tr class="css-bold">
-                        <td class="css-td-right" colspan="5">Genel Toplam:</td>
+                        <td class="css-td-right" colspan="5">Total:</td>
                         <td class="alignRight">{{proformaDetail ? this.mService.giveTotalPrice(proformaDetail).toLocaleString("tr-TR", {style: 'currency', currency: 'USD'}): ''}} $</td>
                         <td></td>
                       </tr>
@@ -360,21 +360,20 @@ import { MatIconModule } from '@angular/material/icon';
                   <app-proforma-content [fEditingProforma]="this.proformaDetailCopy" [fEditingMachineId]="this.contentEditingMachineId" [fEditingPartId]="this.contentEditingPartId" [fEditingServiceId]="this.contentEditingServiceId" (editContentCanceled)="this.cancelContentEdit($event)" (editContentSave)="this.editContentSave($event)" [fNewMachine]="this.contentNewMachine" [fNewPart]="contentNewPart" [fNewService]="contentNewService" />
                 }
                 <div class="row mb-3 css-nomar" style="margin-top:10px">
-                  <label class="col-sm-3 col-form-label">İskonto:</label>
+                  <label class="col-sm-3 col-form-label">Discount:</label>
                   <div class="col-sm-7">
                     @if (proformaDetail && (proformaDetail.percentDiscount || proformaDetail.percentDiscount === 0)) {
                       <input [disabled]="this.changeActive ? false : true" type="text" (change)="checkDiscount($event)" [(ngModel)]="proformaSetDiscount" [ngModelOptions]="{standalone: true}" name="" id="">
                     }
-                    <!--<input [(ngModel)]="customerFilterText" type="text" class="form-control" placeholder="müşteri ismi girin" aria-label="müşteri ismi girin" (input)="filterCustomerChanging($event)" [ngModelOptions]="{standalone: true}"  aria-describedby="basic-addon1">-->
                   </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label">Notlar:</label>
+                    <label class="col-sm-3 col-form-label">Notes:</label>
                     <div class="col-sm-9">
                 @if (proformaDetail && proformaDetail.notes && proformaDetail.notes.length + (N1var ? 1 : 0) > 0) {
                     
                       @if (this.N1var) {
-                        <div class="css-proforma-note">**N1: siparişten sonra programlanacaktır.</div>
+                        <div class="css-proforma-note">**N1: Will be programmed after purchase.</div>
                       }
                       @for (note of proformaDetail.notes; track note) {
                         <div class="css-note-main">
@@ -386,7 +385,7 @@ import { MatIconModule } from '@angular/material/icon';
                       }
                       @if (changeActive) {
                         <div class="css-note-main"><input type="text" class="form-control" id="formNewNote" placeholder="" [(ngModel)]="proformaNewNoteText" [ngModelOptions]="{standalone: true}">
-                        <button class="btn btn-info" (click)="addNote()">Ekle</button></div>
+                        <button class="btn btn-info" (click)="addNote()">Add</button></div>
                       }
                     
                   
@@ -395,7 +394,7 @@ import { MatIconModule } from '@angular/material/icon';
                   <div class="css-proforma-note" style="font-style: italic; font-size: smaller">henüz not yok</div>
                   @if (changeActive) {
                         <div class="css-note-main"><input type="text" class="form-control" id="formNewNote" placeholder="" [(ngModel)]="proformaNewNoteText" [ngModelOptions]="{standalone: true}">
-                        <button class="btn btn-info" (click)="addNote()">Ekle</button></div>
+                        <button class="btn btn-info" (click)="addNote()">Add</button></div>
                       }
                 }
                 </div>
@@ -404,14 +403,14 @@ import { MatIconModule } from '@angular/material/icon';
                 <label class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-7">
                   @if (!changeActive && !this.proformaDetail?.deactive) {
-                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Değiştir</button>
+                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Change</button>
                   }
                   @else if (changeActive && !this.proformaDetail?.deactive) {
-                    <button type="button" (click)="proformaSave()" class="btn btn-success">Kaydet</button>
-                    <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
+                    <button type="button" (click)="proformaSave()" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger" (click)="changeCancel()">Cancel</button>
                   }
                   @else if (!this.proformaDetail?.deactive) {
-                    <button type="button" class="btn btn-success" (click)="newProforma()">Kaydet</button>
+                    <button type="button" class="btn btn-success" (click)="newProforma()">Save</button>
                   }
                 </div>
               </div>
@@ -631,9 +630,9 @@ export class ProformaComponent {
         this.N1var = true;
         return '**N1';
       case 0:
-        return 'stok';
+        return 'stock';
       default:
-        return terminDays + ' gün'
+        return terminDays + ' days'
     }
   }
 
@@ -779,11 +778,11 @@ export class ProformaComponent {
       // ADD N1 NOTE IF NOT EXIST
       if (this.N1var) {
         if (!this.proformaDetail.notes || this.proformaDetail.notes.length < 1) {
-          this.proformaDetail.notes = ["*N1: siparişten sonra programlanacaktır."];
+          this.proformaDetail.notes = ["*N1: Will be programmed after purchase."];
         }
         else {
-          if (this.proformaDetail.notes?.includes("*N1: siparişten sonra programlanacaktır.")) {
-            this.proformaDetail.notes.push("*N1: siparişten sonra programlanacaktır.");
+          if (this.proformaDetail.notes?.includes("*N1: Will be programmed after purchase.")) {
+            this.proformaDetail.notes.push("*N1: Will be programmed after purchase.");
           }
         }
       }
@@ -810,11 +809,10 @@ export class ProformaComponent {
       createdDate: new Date(),
       percentDiscount: 0,
       notes: [
-        "Fiyatlarımıza T.C.M.B. Döviz kuru geçeridir.",
-        "Fiyatlara K.D.V. dahil değildir",
-        "Teslim yeri iş yerimizdir",
-        "Onay (Fax/E-mail) alınmadan sipariş kabul edilmeyecektir.",
-        "Yedek parça ve işçilik bedelleri peşin olarak alınacaktır."
+        "All currencies are USD",
+        "VATs not included",
+        "Delivery: EXW",
+        "Purchase will not be accepted without acceptance document."
       ]
     }
     this.proformaSetDiscount = 0;
@@ -831,7 +829,7 @@ export class ProformaComponent {
     }
   }
   alertPhase2() {
-    alert("Faz 2'de yapılacak.")
+    alert("Phase 2.")
   }
   newTab(id: number) {
     window.open(`/proforma/document/${id}`, "_blank");

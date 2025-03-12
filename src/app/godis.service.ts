@@ -15,10 +15,10 @@ export class GodisService {
   // >>> ======================================= MOCK DATABASE
 
   protected users: User[] = [
-    { id: 0, userName: 'admin', password: 'admin', email: 'arge@goknur.eu' },
-    { id: 1, userName: 'boss', password: 'boss', email: 'boss@goknur.eu' },
-    { id: 2, userName: 'director', password: 'director', email: 'director@goknur.eu' },
-    { id: 3, userName: 'manager', password: 'manager', email: 'manager@goknur.eu' },
+    { id: 0, userName: 'admin', password: 'admin', email: 'arge@company.eu' },
+    { id: 1, userName: 'boss', password: 'boss', email: 'boss@company.eu' },
+    { id: 2, userName: 'director', password: 'director', email: 'director@company.eu' },
+    { id: 3, userName: 'manager', password: 'manager', email: 'manager@company.eu' },
   ];
 
   protected userRoleTypes: UserRoleType[] = [
@@ -31,94 +31,94 @@ export class GodisService {
   protected userRoles: UserRole[] = [
     { 
       id: 0, 
-      user: { id: 0, userName: 'admin', password: 'admin', email: 'arge@goknur.eu' }, 
+      user: { id: 0, userName: 'admin', password: 'admin', email: 'arge@company.eu' }, 
       role: { id: 0, name: 'admin' }, 
       start: new Date("02.14.2025") 
     },
     { 
       id: 1, 
-      user: { id: 1, userName: 'boss', password: 'boss', email: 'boss@goknur.eu' }, 
+      user: { id: 1, userName: 'boss', password: 'boss', email: 'boss@company.eu' }, 
       role: { id: 1, name: 'boss' }, 
       start: new Date("02.14.2000") 
     },
     { 
       id: 2, 
-      user:{ id: 2, userName: 'director', password: 'director', email: 'director@goknur.eu' }, 
+      user:{ id: 2, userName: 'director', password: 'director', email: 'director@company.eu' }, 
       role: { id: 2, name: 'director'}, 
       start: new Date("02.14.2015") 
     },
     { 
       id: 3, 
-      user:{ id: 3, userName: 'manager', password: 'manager', email: 'manager@goknur.eu' }, 
+      user:{ id: 3, userName: 'manager', password: 'manager', email: 'manager@company.eu' }, 
       role: { id: 3, name: 'manager'}, 
       start: new Date("02.14.2020") 
     },
   ];
 
   protected machineModels: MachineModel[] = [
-    { id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' },
-    { id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' },
-    { id: 2, abbreviation: 'TSM', name: 'Talaş Sarma Makinesi' },
-    { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
-    { id: 4, abbreviation: 'YGO', name: 'Yıkama Giriş Otomasyonu' },
-    { id: 5, abbreviation: 'OFMK', name: 'Otomatik Frezeli Maça Kaynak Makinesi', Deactive: true },
-    { id: 6, abbreviation: 'TOPY', name: 'Teflon Otomatik Pul Yükleme Otomasyonu' },
+    { id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' },
+    { id: 1, abbreviation: 'OMKM', name: 'Automatic Core Welding Machine' },
+    { id: 2, abbreviation: 'TSM', name: 'Chip Winding Machine' },
+    { id: 3, abbreviation: 'PM', name: 'Rivet Machine' },
+    { id: 4, abbreviation: 'YGO', name: 'Washing Entry Automation' },
+    { id: 5, abbreviation: 'OFMK', name: 'Automatic Milled Core Welding Machine', Deactive: true },
+    { id: 6, abbreviation: 'TOPY', name: 'Teflon Automatic Washer Loading Automation' },
   ];
 
   protected machineModelPrices: MachineModelPrice[] = [
     {
       id: 0,
-      model: { id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' },
+      model: { id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' },
       price: 100500,
       validityDate: new Date("02.14.2025"),
     },
     {
       id: 1,
-      model: { id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' },
+      model: { id: 1, abbreviation: 'OMKM', name: 'Automatic Core Welding Machine' },
       price: 92500,
       validityDate: new Date("02.14.2025"),
     },
     {
       id: 2,
-      model: { id: 2, abbreviation: 'TSM', name: 'Talaş Sarma Makinesi' },
+      model: { id: 2, abbreviation: 'TSM', name: 'Chip Winding Machine' },
       price: 22500,
       validityDate: new Date("02.14.2025"),
     },
     {
       id: 3,
-      model: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
+      model: { id: 3, abbreviation: 'PM', name: 'Rivet Machine' },
       price: 42500,
       validityDate: new Date("02.12.2025"),
       validityEndDate: new Date("02.24.2025")
     },
     {
       id: 4,
-      model: { id: 4, abbreviation: 'YGO', name: 'Yıkama Giriş Otomasyonu' },
+      model: { id: 4, abbreviation: 'YGO', name: 'Washing Entry Automation' },
       price: 62500,
       validityDate: new Date("02.14.2025"),
     },
     {
       id: 5,
-      model: { id: 5, abbreviation: 'OFMK', name: 'Otomatik Frezeli Maça Kaynak Makinesi' },
+      model: { id: 5, abbreviation: 'OFMK', name: 'Automatic Milled Core Welding Machine' },
       price: 62500,
       validityDate: new Date("02.14.2025"),
     },
     {
       id: 6,
-      model: { id: 6, abbreviation: 'TOPY', name: 'Teflon Otomatik Pul Yükleme Otomasyonu' },
+      model: { id: 6, abbreviation: 'TOPY', name: 'Teflon Automatic Washer Loading Automation' },
       price: 72500,
       validityDate: new Date("10.02.2024"),
       validityEndDate: new Date("02.14.2025"),
     },
     {
       id: 7,
-      model: { id: 6, abbreviation: 'TOPY', name: 'Teflon Otomatik Pul Yükleme Otomasyonu' },
+      model: { id: 6, abbreviation: 'TOPY', name: 'Teflon Automatic Washer Loading Automation' },
       price: 72500,
       validityDate: new Date("02.14.2025"),
     },
     {
       id: 8,
-      model: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
+      model: { id: 3, abbreviation: 'PM', name: 'Rivet Machine' },
       price: 40000,
       validityDate: new Date("02.24.2025"),
     },
@@ -127,40 +127,40 @@ export class GodisService {
   protected parts: Part[] = [
     { 
       id: 0, 
-      name: 'Y60 Zincir dişlisi', 
+      name: 'Y60 Chain sprocket', 
       code: 'GYP-1000001', 
-      inMachineModels: [{ id: 4, abbreviation: 'YGO', name: 'Yıkama Giriş Otomasyonu' }],
-      unit: "adet"
+      inMachineModels: [{ id: 4, abbreviation: 'YGO', name: 'Washing Entry Automation' }],
+      unit: "piece"
     },
     { id: 1, 
-      name: 'Servo flanşı 0,75kW', 
+      name: 'Servo flange 0,75kW', 
       code: 'GYP-1000002',
-      inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }],
-      unit: "adet"
+      inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' }],
+      unit: "piece"
     },
     { id: 2, 
-      name: 'Kaplin takımı D40', 
+      name: 'Coupling set D40', 
       code: 'GYP-1000003',
-      inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }],
-      unit: "adet"
+      inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' }],
+      unit: "piece"
     },
     { id: 3, 
-      name: 'D100 Vantuz', 
+      name: 'D100 Gripper', 
       code: 'GYP-1000004',
-      inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }],
-      unit: "adet"
+      inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' }],
+      unit: "piece"
     },
     { id: 4, 
-      name: 'Kaynak baskı takımı', 
+      name: 'Welding press kit', 
       code: 'GYP-1000005',
-      inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }],
-      unit: "adet"
+      inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Automatic Core Welding Machine' }],
+      unit: "piece"
     },
     { id: 5, 
-      name: 'Pens tutucu tabanca', 
+      name: 'Collet holder gun', 
       code: 'GYP-1000006',
-      inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }],
-      unit: "adet"
+      inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Automatic Core Welding Machine' }],
+      unit: "piece"
     }
   ];
 
@@ -169,9 +169,9 @@ export class GodisService {
       id: 0, 
       part: { 
         id: 0, 
-        name: 'Y60 Zincir dişlisi', 
+        name: 'Y60 Chain sprocket', 
         code: 'GYP-1000001', 
-        inMachineModels: [{ id: 4, abbreviation: 'YGO', name: 'Yıkama Giriş Otomasyonu' }]
+        inMachineModels: [{ id: 4, abbreviation: 'YGO', name: 'Washing Entry Automation' }]
       }, 
       price: 33, 
       validityDate: new Date("02.14.2025")
@@ -179,9 +179,9 @@ export class GodisService {
     { 
       id: 1, 
       part: { id: 1, 
-        name: 'Servo flanşı 0,75kW', 
+        name: 'Servo flange 0,75kW', 
         code: 'GYP-1000002',
-        inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }]
+        inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' }]
       }, 
       price: 66, 
       validityDate: new Date("02.14.2025")
@@ -189,9 +189,9 @@ export class GodisService {
     { 
       id: 2, 
       part: { id: 2, 
-        name: 'Kaplin takımı D40', 
+        name: 'Coupling set D40', 
         code: 'GYP-1000003',
-        inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }]
+        inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' }]
       }, 
       price: 44, 
       validityDate: new Date("02.14.2025")
@@ -199,9 +199,9 @@ export class GodisService {
     { 
       id: 3, 
       part: { id: 3, 
-        name: 'D100 Vantuz', 
+        name: 'D100 Gripper', 
         code: 'GYP-1000004',
-        inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Otomatik Taban Torna Makinesi' }]
+        inMachineModels: [{ id: 0, abbreviation: 'OTTM', name: 'Automatic Sole Lathe Machine' }]
       }, 
       price: 33, 
       validityDate: new Date("02.14.2025")
@@ -209,9 +209,9 @@ export class GodisService {
     { 
       id: 4, 
       part: { id: 4, 
-        name: 'Kaynak baskı takımı', 
+        name: 'Welding press kit', 
         code: 'GYP-1000005',
-        inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }]
+        inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Automatic Core Welding Machine' }]
       }, 
       price: 230, 
       validityDate: new Date("02.14.2025")
@@ -219,9 +219,9 @@ export class GodisService {
     { 
       id: 5, 
       part: { id: 5, 
-        name: 'Pens tutucu tabanca', 
+        name: 'Collet holder gun', 
         code: 'GYP-1000006',
-        inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }]
+        inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Automatic Core Welding Machine' }]
       }, 
       price: 640, 
       validityDate: new Date("02.14.2025")
@@ -229,48 +229,48 @@ export class GodisService {
   ];
 
   protected services: Service[]= [
-    { id: 0, name: 'Montaj (Saatlik)' },
-    { id: 1, name: 'Montaj (Günlük)' },
-    { id: 2, name: 'Bakım (Saatlik)' },
-    { id: 3, name: 'Bakım (Günlük)' },
-    { id: 4, name: 'Devreye Alma (Günlük)' }
+    { id: 0, name: 'Installation (Hourly)' },
+    { id: 1, name: 'Installation (Daily)' },
+    { id: 2, name: 'Maintenance (Hourly)' },
+    { id: 3, name: 'Maintenance (Daily)' },
+    { id: 4, name: 'Put Into Operation (Daily)' }
   ];
 
   protected servicePrices: ServicePrice[] = [
     { 
       id: 0,
-      service: { id: 0, name: 'Montaj (Saatlik)' }, 
+      service: { id: 0, name: 'Installation (Hourly)' }, 
       price: 100, 
       validityDate: new Date("02.14.2025") 
     },
     { 
       id: 1,
-      service: { id: 1, name: 'Montaj (Günlük)' }, 
+      service: { id: 1, name: 'Installation (Daily)' }, 
       price: 500, 
       validityDate: new Date("01.14.2024"), 
       validityEndDate: new Date("01.25.2025")
     },
     { 
       id: 2,
-      service: { id: 2, name: 'Bakım (Saatlik)' }, 
+      service: { id: 2, name: 'Maintenance (Hourly)' }, 
       price: 200, 
       validityDate: new Date("02.14.2025") 
     },
     { 
       id: 3,
-      service: { id: 3, name: 'Bakım (Günlük)' }, 
+      service: { id: 3, name: 'Maintenance (Daily)' }, 
       price: 600, 
       validityDate: new Date("02.14.2025") 
     },
     { 
       id: 4,
-      service: { id: 4, name: 'Devreye Alma (Günlük)' }, 
+      service: { id: 4, name: 'Put Into Operation (Daily)' }, 
       price: 400, 
       validityDate: new Date("02.14.2025") 
     },
     { 
       id: 5,
-      service: { id: 1, name: 'Montaj (Günlük)' }, 
+      service: { id: 1, name: 'Installation (Daily)' }, 
       price: 550, 
       validityDate: new Date("01.25.2025") 
     },
@@ -279,16 +279,16 @@ export class GodisService {
   protected customers: Customer[] = [
     {
       id: 0,
-      name: "Bonera Çelik",
-      title: "BONERA TUTKU METAL MUTFAK EŞYALARI PLASTİK İÇ VE DIŞ TİCARET SANAYİ LİMİTED ŞİRKETİ",
-      address: "OSB, Kahramanmaraş",
+      name: "Client Company",
+      title: "Client Company Title Co",
+      address: "OSB, City",
     }
   ];
 
   protected customerDelegates: CustomerDelegate[] = [
     {
       id: 0,
-      customer: { id: 0, name: "Bonera Çelik", address: "OSB, Kahramanmaraş" },
+      customer: { id: 0, name: "Client Company", address: "OSB, City" },
       firstName: "Arif",
       lastName: "Delege",
       phone: "+905321000000",
@@ -299,35 +299,35 @@ export class GodisService {
   protected proformas: Proforma[] = [
     {
       id: 0,
-      customer: { id: 0, name: "Bonera Çelik",title: "BONERA TUTKU METAL MUTFAK EŞYALARI PLASTİK İÇ VE DIŞ TİCARET SANAYİ LİMİTED ŞİRKETİ", address: "OSB, Kahramanmaraş"},
+      customer: { id: 0, name: "Client Company",title: "Client Company Title Co", address: "OSB, City"},
       machines: [{
-        machine: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
+        machine: { id: 3, abbreviation: 'PM', name: 'Rivet Machine' },
         unitPrice: 43000, 
         quantity: 2
       }],
       deadline: new Date("20.01.1970"),
       percentDiscount: 5,
-      createdBy: { id: 3, userName: 'manager', password: 'manager', email: 'manager@goknur.eu' },
+      createdBy: { id: 3, userName: 'manager', password: 'manager', email: 'manager@company.eu' },
       createdDate: new Date("2025-02-23T03:24:00Z"),
       validUntil: new Date("23.02.2025 11:03:43")
     },
     {
       id: 1,
-      customer: { id: 0, name: "Bonera Çelik",title: "BONERA TUTKU METAL MUTFAK EŞYALARI PLASTİK İÇ VE DIŞ TİCARET SANAYİ LİMİTED ŞİRKETİ", address: "OSB, Kahramanmaraş"},
+      customer: { id: 0, name: "Client Company",title: "Client Company Title Co", address: "OSB, City"},
       machines: [{
-        machine: { id: 3, abbreviation: 'PM', name: 'Perçin Makinesi' },
+        machine: { id: 3, abbreviation: 'PM', name: 'Rivet Machine' },
         unitPrice: 23000, 
         quantity: 3,
-        notes: ["kapasite: 1000 adet/saat", "vibrasyon: X marka"],
+        notes: ["capacity: 1000 piece/h", "vibration: X brand"],
         terminDays: 60
       }],
       parts: [
         {
           part: { id: 5, 
-            name: 'Pens tutucu tabanca', 
+            name: 'Collet holder gun', 
             code: 'GYP-1000006',
-            inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Otomatik Maça Kaynak Makinesi' }],
-            unit: "adet"
+            inMachineModels: [{ id: 1, abbreviation: 'OMKM', name: 'Automatic Core Welding Machine' }],
+            unit: "piece"
           },
           unitPrice: 600,
           quantity: 4,
@@ -336,25 +336,23 @@ export class GodisService {
       ],
       services: [
         {
-          service: { id: 1, name: 'Montaj (Günlük)' },
+          service: { id: 1, name: 'Installation (Daily)' },
           unitPrice: 510,
           quantity: 2,
-          notes: ["yol ve konaklama masrafları müşteriye ait"],
+          notes: ["Travel and accommodation expenses are covered by the customer."],
           terminDays: -1
         }
       ],
       deadline: new Date("20.01.1970"),
       percentDiscount: 5,
-      createdBy: { id: 3, userName: 'manager', password: 'manager', email: 'manager@goknur.eu' },
+      createdBy: { id: 3, userName: 'manager', password: 'manager', email: 'manager@company.eu' },
       createdDate: new Date("2025-01-23T03:24:00Z"),
       validUntil: new Date("2025-01-27T03:24:00Z"),
       notes: [
-        "Tüm fiyatlarımızda para birimi USD ($)'dir.",
-        "Fiyatlarımıza T.C.M.B. Döviz kuru geçeridir.",
-        "Fiyatlara K.D.V. dahil değildir",
-        "Teslim yeri iş yerimizdir",
-        "Onay (Fax/E-mail) alınmadan sipariş kabul edilmeyecektir.",
-        "Yedek parça ve işçilik bedelleri peşin olarak alınacaktır."
+        "All currencies are USD",
+        "VATs not included",
+        "Delivery: EXW",
+        "Purchase will not be accepted without acceptance document."
       ]
     }
   ];

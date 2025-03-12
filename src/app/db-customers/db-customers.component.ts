@@ -12,14 +12,14 @@ import { CustomerDelegate } from '../godid';
       @if (!this.detailId && this.detailId != 0) {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
-          <span>Müşteriler</span>
+          <span>Customers</span>
         </section>
         <section class="css-table-manage">
           <div>
-            <button type="button" class="btn btn-success" [routerLink]="['/db-customers/new']">+ Yeni Ekle</button>
+            <button type="button" class="btn btn-success" [routerLink]="['/db-customers/new']">+ Add New</button>
           </div>
         </section>
         <section class="table">
@@ -27,8 +27,8 @@ import { CustomerDelegate } from '../godid';
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">İsim</th>
-                <th scope="col">Detay</th>
+                <th scope="col">Name</th>
+                <th scope="col">Detail</th>
               </tr>
             </thead>
             <tbody>
@@ -48,11 +48,11 @@ import { CustomerDelegate } from '../godid';
       @else {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
           <a [routerLink]="['/db-customers']">
-            Müşteriler
+            Customers
           </a>
           <span>></span>
           <span>{{ this.newRecord ? "Yeni kayıt" : this.editingCustomer?.name }}</span>
@@ -62,19 +62,19 @@ import { CustomerDelegate } from '../godid';
           <div class="css-div-form">
             <form [formGroup]="fgCustomer" (submit)="editCustomer()">
               <div class="row mb-3">
-                  <label for="formName" class="col-sm-3 col-form-label">Firma ismi:</label>
+                  <label for="formName" class="col-sm-3 col-form-label">Company Name:</label>
                   <div class="col-sm-7">
                     <input type="text" class="form-control" id="formName" placeholder="" value="{{this.editingCustomer?.name}}" formControlName="name" [readOnly]="!changeActive">
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <label for="formTitle" class="col-sm-3 col-form-label">Ünvan:</label>
+                  <label for="formTitle" class="col-sm-3 col-form-label">Title:</label>
                   <div class="col-sm-7">
                     <input type="text" class="form-control" id="formTitle" placeholder="" value="{{this.editingCustomer?.name}}" formControlName="title" [readOnly]="!changeActive">
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <label for="formAddress" class="col-sm-3 col-form-label">Adres:</label>
+                  <label for="formAddress" class="col-sm-3 col-form-label">Address:</label>
                   <div class="col-sm-7">
                     <textarea style="resize: none; height: 100px" class="form-control" id="formAddress" placeholder="" formControlName="address" [readOnly]="!changeActive">
                       {{this.editingCustomer?.name}}
@@ -85,14 +85,14 @@ import { CustomerDelegate } from '../godid';
                 <label class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-7">
                   @if (!changeActive) {
-                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Değiştir</button>
+                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Change</button>
                   }
                   @else if (!this.newRecord) {
-                    <button type="submit" class="btn btn-success">Kaydet</button>
-                    <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger" (click)="changeCancel()">Cancel</button>
                   }
                   @else {
-                    <button type="button" class="btn btn-success" (click)="newCustomer()">Kaydet</button>
+                    <button type="button" class="btn btn-success" (click)="newCustomer()">Save</button>
                   }
                 </div>
               </div>

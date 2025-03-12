@@ -27,11 +27,11 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Kod</th>
-                <th scope="col">İsim</th>
-                <th scope="col">Liste Fiyatı</th>
-                <th scope="col">Detay</th>
-                <th scope="col">Aktif</th>
+                <th scope="col">Code</th>
+                <th scope="col">Name</th>
+                <th scope="col">List Price</th>
+                <th scope="col">Detail</th>
+                <th scope="col">Active</th>
               </tr>
             </thead>
             <tbody>
@@ -66,11 +66,11 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       @else {
         <section class="css-section-navi">
           <a [routerLink]="['/database']">
-            Veritabanı
+            Database
           </a>
           <span>></span>
           <a [routerLink]="['/db-parts']">
-            Yedek Parçalar
+            Spare Parts
           </a>
           <span>></span>
           <span>{{ this.newRecord ? "Yeni kayıt" : qPartDetail?.name }}</span>
@@ -81,19 +81,19 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
             <!--<form [formGroup]="fgEditMachineModel" (submit)="editMachineModel()">-->
               <form [formGroup]="fgEditPart" (submit)="saveEditing()">
               <div class="row mb-3">
-                <label for="formCode" class="col-sm-3 col-form-label">Kod:</label>
+                <label for="formCode" class="col-sm-3 col-form-label">Code:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formCode" placeholder="" value="{{this.qPartDetail?.code}}" formControlName="code" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formName" class="col-sm-3 col-form-label">İsim:</label>
+                <label for="formName" class="col-sm-3 col-form-label">Name:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formName" placeholder="" value="{{this.qPartDetail?.name}}" formControlName="name" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formInMachine" class="col-sm-3 col-form-label">Makineler:</label>
+                <label for="formInMachine" class="col-sm-3 col-form-label">Machines:</label>
                 <div class="col-sm-7 css-inElements">
                   @for (machine of this.newRecord ? this.newParInMachines : this.qPartDetail?.inMachines; track machine) {
                     <div class="css-inMachineMain">
@@ -108,7 +108,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
                     
                       <div class="btn-group">
                         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Makineye ekle
+                          Add to a Machine
                         </button>
                         <div class="dropdown-menu">
                           @for (addableMachine of this.addAbleMachineList; track addableMachine) {
@@ -123,19 +123,19 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formImageUrl" class="col-sm-3 col-form-label">Resim:</label>
+                <label for="formImageUrl" class="col-sm-3 col-form-label">Image:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formImageUrl" placeholder="" value="{{this.qPartDetail?.pictureUrl}}" formControlName="imageUrl" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formPrice" class="col-sm-3 col-form-label">Fiyat:</label>
+                <label for="formPrice" class="col-sm-3 col-form-label">Price:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formPrice" placeholder="" value="{{this.qPartDetail?.price}}" formControlName="price" [readOnly]="!changeActive">
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="formUnit" class="col-sm-3 col-form-label">Birim:</label>
+                <label for="formUnit" class="col-sm-3 col-form-label">Unit:</label>
                 <div class="col-sm-7">
                   <input type="text" class="form-control" id="formUnit" placeholder="" value="{{this.qPartDetail?.unit}}" formControlName="unit" [readOnly]="!changeActive">
                 </div>
@@ -144,14 +144,14 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
                 <label class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-7">
                   @if (!changeActive) {
-                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Değiştir</button>
+                    <button type="button" class="btn btn-warning" (click)="makeChangeActive()">Change</button>
                   }
                   @else if (!this.newRecord) {
-                    <button type="submit" class="btn btn-success">Kaydet</button>
-                    <button type="button" class="btn btn-danger" (click)="changeCancel()">İptal</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger" (click)="changeCancel()">Cancel</button>
                   }
                   @else {
-                    <button type="button" class="btn btn-success" (click)="newPart()">Kaydet</button>
+                    <button type="button" class="btn btn-success" (click)="newPart()">Save</button>
                   }
                 </div>
               </div>
