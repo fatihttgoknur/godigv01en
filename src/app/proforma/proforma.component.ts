@@ -177,14 +177,16 @@ import { MatIconModule } from '@angular/material/icon';
 
                   <div class="col-sm-7">
                     @if ((this.newRecord || this.changeActive) && ! this.proformaContentEdit) {
-                      <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        + Add
-                      </button>
-                      <div class="dropdown-menu">
-                          <!--<div class="dropdown-divider"></div>-->
-                          <a class="dropdown-item" style="cursor: pointer;" (click)="addMachine()">Machine</a>
-                          <a class="dropdown-item" style="cursor: pointer;" (click)="addPart()">Spare Part</a>
-                          <a class="dropdown-item" style="cursor: pointer;" (click)="addService()">Service</a>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          + Add
+                        </button>
+                        <div class="dropdown-menu">
+                            <!--<div class="dropdown-divider"></div>-->
+                            <a class="dropdown-item" style="cursor: pointer;" (click)="addMachine()">Machine</a>
+                            <a class="dropdown-item" style="cursor: pointer;" (click)="addPart()">Spare Part</a>
+                            <a class="dropdown-item" style="cursor: pointer;" (click)="addService()">Service</a>
+                        </div>
                       </div>
                     }
                   </div>
